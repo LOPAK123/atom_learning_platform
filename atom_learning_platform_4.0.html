@@ -1,0 +1,2401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atom — Ghana-first learning platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #07111f;
+        --bg-alt: #0d1830;
+        --panel: rgba(13, 24, 48, 0.9);
+        --panel-strong: rgba(17, 30, 58, 0.98);
+        --card: rgba(19, 31, 58, 0.7);
+        --card-2: rgba(22, 36, 65, 0.9);
+        --line: rgba(148, 163, 184, 0.18);
+        --text: #eaf2ff;
+        --muted: #a5b5d1;
+        --blue: #5ea2ff;
+        --blue-2: #7f8cff;
+        --purple: #9d65ff;
+        --orange: #ffb75d;
+        --green: #62dd9b;
+        --red: #ff6a7a;
+        --shadow: 0 20px 40px rgba(8, 15, 29, 0.45);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(94, 162, 255, 0.16), transparent 28%),
+          radial-gradient(circle at right, rgba(157, 101, 255, 0.18), transparent 30%),
+          var(--bg);
+        color: var(--text);
+      }
+
+      img { max-width: 100%; display: block; }
+      a { text-decoration: none; color: inherit; }
+      button, input { font: inherit; }
+
+      .container {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(14px);
+        background: rgba(7, 17, 31, 0.7);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 78px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .logo {
+        width: 42px; height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--blue), var(--purple));
+        box-shadow: var(--shadow);
+      }
+
+      .brand-mark {
+        font-size: 1.1rem;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .nav-links a:hover { color: var(--text); }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 0.9rem 1.25rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+
+      .btn:hover { transform: translateY(-1px); }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--blue), var(--purple));
+        box-shadow: 0 12px 25px rgba(109, 116, 255, 0.35);
+      }
+      .btn-secondary {
+        border-color: rgba(148, 163, 184, 0.3);
+        background: rgba(15, 23, 42, 0.55);
+        color: var(--text);
+      }
+      .btn-ghost {
+        background: rgba(94, 162, 255, 0.08);
+        border-color: rgba(94, 162, 255, 0.26);
+        color: #dfeeff;
+      }
+
+      .hero {
+        padding: 64px 0 42px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 46px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(94, 162, 255, 0.09);
+        border: 1px solid rgba(126, 170, 255, 0.24);
+        color: #bcd8ff;
+        font-size: 0.86rem;
+        font-weight: 600;
+      }
+
+      h1 {
+        font-size: clamp(2.7rem, 5vw, 5rem);
+        line-height: 0.96;
+        letter-spacing: -0.06em;
+        margin: 18px 0 16px;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #dfe9ff 0%, #6ec3ff 20%, #a78bfa 66%, #f6b26c 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero p {
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.7;
+        max-width: 620px;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .mini-stats {
+        display: flex;
+        gap: 22px;
+        flex-wrap: wrap;
+        margin-top: 26px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .mini-stats strong {
+        color: var(--text);
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+      }
+
+      .dashboard-preview {
+        position: relative;
+        background: rgba(11, 21, 38, 0.95);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .preview-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 18px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .topbar-dots {
+        display: flex;
+        gap: 8px;
+      }
+      .dot { width: 10px; height: 10px; border-radius: 50%; }
+      .dot.red { background: #ff5f57; }
+      .dot.yellow { background: #ffbd2f; }
+      .dot.green { background: #28c840; }
+
+      .preview-body {
+        padding: 18px;
+      }
+
+      .preview-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 18px;
+      }
+
+      .panel {
+        background: rgba(24, 35, 62, 0.8);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 16px;
+      }
+
+      .xp-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.36rem 0.58rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        background: rgba(98, 221, 155, 0.12);
+        color: #b9f3d0;
+      }
+
+      .xp-bar {
+        height: 10px;
+        background: rgba(148, 163, 184, 0.14);
+        border-radius: 999px;
+        overflow: hidden;
+        margin: 12px 0 18px;
+      }
+      .xp-bar > span {
+        display: block;
+        width: 63%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--blue), var(--green));
+      }
+
+      .lesson-card {
+        background: rgba(11, 18, 33, 0.82);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      .lesson-card h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .progress-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .progress-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 12px;
+        background: rgba(148, 163, 184, 0.04);
+      }
+
+      .progress-item .label {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .progress-item strong { font-size: 0.84rem; }
+
+      .mini-graph {
+        display: flex;
+        align-items: end;
+        gap: 7px;
+        height: 118px;
+        margin-top: 12px;
+      }
+      .mini-graph span {
+        display: block;
+        width: 12%;
+        border-radius: 8px 8px 0 0;
+        background: linear-gradient(180deg, var(--blue), var(--purple));
+      }
+
+      section {
+        padding: 28px 0;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .section-head h2 {
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        letter-spacing: -0.06em;
+      }
+      .section-head p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: 18px;
+      }
+
+      .feature-card,
+      .subject-card,
+      .stat-card,
+      .leader-card,
+      .quest-card,
+      .achievement-card,
+      .teacher-card {
+        background: rgba(15, 27, 49, 0.88);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 22px 18px;
+        box-shadow: 0 12px 30px rgba(9, 16, 29, 0.2);
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 16px;
+        font-size: 1.25rem;
+        background: linear-gradient(135deg, rgba(94, 162, 255, 0.25), rgba(157, 101, 255, 0.25));
+        border: 1px solid rgba(127, 140, 255, 0.3);
+      }
+
+      .feature-card h3, .subject-card h3, .quest-card h3, .achievement-card h3 { margin: 0 0 10px; }
+      .feature-card p, .subject-card p, .quest-card p, .achievement-card p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+      .subject-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap: 18px;
+      }
+
+      .subject-card .tag {
+        display: inline-flex;
+        margin-bottom: 12px;
+        padding: 0.42rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        background: rgba(255, 183, 93, 0.12);
+        color: #ffdba6;
+      }
+
+      .pill-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(148, 163, 184, 0.08);
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        color: var(--muted);
+        border-radius: 999px;
+        font-size: 0.76rem;
+        padding: 0.38rem 0.7rem;
+      }
+
+      .app-shell {
+        display: none;
+        padding: 30px 0 60px;
+      }
+      .app-shell.visible { display: block; }
+      body.app-user .topbar,
+      body.app-user main > section:not(.app-shell) {
+        display: none !important;
+      }
+      body.app-user .app-shell {
+        display: block !important;
+      }
+
+      .app-layout {
+        display: grid;
+        grid-template-columns: 240px minmax(0,1fr);
+        gap: 22px;
+      }
+
+      .sidebar {
+        background: rgba(9, 17, 29, 0.85);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 18px 14px;
+        height: fit-content;
+        position: sticky;
+        top: 96px;
+      }
+
+      .profile-chip {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 10px 18px;
+        border-bottom: 1px solid var(--line);
+        min-width: 0;
+      }
+      .avatar {
+        width: 42px; height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #4db8ff, #8b5cf6);
+        font-weight: 800;
+      }
+      .profile-chip h4 { margin: 0; font-size: 0.98rem; }
+      .profile-chip p { margin: 2px 0 0; color: var(--muted); font-size: 0.78rem; }
+      .profile-chip > div:nth-child(2) { min-width: 0; }
+      .profile-email { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .logout-btn {
+        margin-left: auto;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 10px;
+        padding: 0.45rem 0.6rem;
+        background: rgba(148, 163, 184, 0.06);
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 0.75rem;
+      }
+      .logout-btn:hover { color: var(--text); border-color: rgba(140, 193, 255, 0.4); }
+
+      .nav-rail {
+        display: grid;
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .nav-item {
+        border: 1px solid transparent;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0.8rem 0.9rem;
+        border-radius: 14px;
+        color: var(--muted);
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .nav-item.active {
+        background: rgba(94, 162, 255, 0.08);
+        border-color: rgba(94, 162, 255, 0.22);
+        color: var(--text);
+      }
+      .nav-item:hover { background: rgba(148, 163, 184, 0.04); }
+
+      .content {
+        min-width: 0;
+      }
+
+      .top-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px 20px;
+        background: rgba(10, 19, 31, 0.9);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+      }
+
+      .top-strip h2 {
+        margin: 0;
+        font-size: clamp(1.4rem, 2vw, 2rem);
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0.7rem 0.9rem;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid var(--line);
+        min-width: 260px;
+        color: var(--muted);
+      }
+      .search-box input {
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--text);
+        width: 100%;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: 18px;
+        margin-top: 18px;
+      }
+      .stat-card {
+        padding: 20px 18px;
+      }
+      .stat-card .label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+      }
+      .stat-card strong {
+        font-size: clamp(1.5rem, 2vw, 2.2rem);
+        letter-spacing: -0.04em;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .command-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .next-move {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgba(42, 91, 151, 0.7), rgba(66, 45, 112, 0.82));
+        border: 1px solid rgba(126, 191, 255, 0.34);
+        border-radius: 24px;
+        padding: 24px;
+      }
+      .next-move::after {
+        content: '';
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        right: -80px;
+        top: -100px;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 50%;
+      }
+      .overline {
+        color: #b9dcff;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .next-move h3 { margin: 14px 0 8px; font-size: clamp(1.35rem, 2.4vw, 2rem); }
+      .next-move p { max-width: 600px; margin: 0; color: #d6e5fa; line-height: 1.6; }
+      .move-meta { display: flex; flex-wrap: wrap; gap: 9px; margin: 18px 0; }
+      .move-meta span { padding: 0.46rem 0.68rem; border-radius: 999px; background: rgba(4, 12, 27, 0.28); color: #e9f4ff; font-size: 0.78rem; }
+      .health-panel { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+      .health-score { width: 112px; height: 112px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--green) 0 82%, rgba(148,163,184,0.14) 82% 100%); position: relative; }
+      .health-score::before { content: ''; position: absolute; inset: 9px; border-radius: inherit; background: var(--panel-strong); }
+      .health-score strong { position: relative; font-size: 1.55rem; }
+      .health-copy h3 { margin: 0 0 8px; }
+      .health-copy p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 0.86rem; }
+      .signal-list { display: grid; gap: 9px; margin-top: 14px; }
+      .signal { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 0.82rem; }
+      .signal strong { color: var(--text); }
+      .section-label { margin: 24px 0 10px; color: var(--muted); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+      .week-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+      .week-day { padding: 10px 6px; border: 1px solid var(--line); border-radius: 12px; text-align: center; background: rgba(10,18,31,0.6); color: var(--muted); font-size: 0.72rem; }
+      .week-day span { display: block; height: 34px; margin-top: 8px; border-radius: 7px; background: linear-gradient(180deg, var(--blue), rgba(94,162,255,0.18)); }
+      .week-day:nth-child(2) span { height: 24px; margin-top: 18px; }
+      .week-day:nth-child(3) span { height: 30px; margin-top: 12px; }
+      .week-day:nth-child(4) span { height: 18px; margin-top: 24px; }
+      .week-day:nth-child(5) span { height: 38px; margin-top: 4px; }
+      .week-day:nth-child(6) span { height: 27px; margin-top: 15px; }
+      .week-day:nth-child(7) span { height: 42px; margin-top: 0; background: linear-gradient(180deg, var(--orange), rgba(255,183,93,0.18)); }
+      .knowledge-map { display: grid; gap: 12px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: rgba(10,18,31,0.58); }
+      .map-root { width: fit-content; margin: 0 auto; padding: 0.6rem 1rem; border: 1px solid rgba(98,221,155,0.45); border-radius: 999px; background: rgba(98,221,155,0.12); color: #bff5d5; font-weight: 800; }
+      .map-branches { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+      .map-node { padding: 12px 10px; border: 1px solid var(--line); border-radius: 14px; background: rgba(15,27,49,0.8); text-align: center; }
+      .map-node strong { display: block; margin-bottom: 6px; }
+      .map-node span { color: var(--muted); font-size: 0.78rem; }
+      .map-node.developing { border-color: rgba(255,183,93,0.45); }
+      .map-node.current { border-color: rgba(94,162,255,0.5); box-shadow: 0 0 0 1px rgba(94,162,255,0.12); }
+      .ai-modes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+      .ai-mode { padding: 0.55rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; background: rgba(148,163,184,0.05); color: var(--muted); cursor: pointer; font-size: 0.8rem; }
+      .ai-mode.active, .ai-mode:hover { border-color: rgba(94,162,255,0.4); background: rgba(94,162,255,0.12); color: var(--text); }
+      .readiness-grid { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 18px; align-items: center; }
+      .readiness-score { text-align: center; padding: 20px; border-radius: 18px; background: linear-gradient(145deg, rgba(98,221,155,0.12), rgba(94,162,255,0.1)); }
+      .readiness-score strong { display: block; font-size: 3rem; letter-spacing: -0.06em; }
+      .readiness-score span { color: #bff5d5; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; }
+      .readiness-bars { display: grid; gap: 12px; }
+      .readiness-bar { display: grid; grid-template-columns: 100px 1fr 40px; gap: 10px; align-items: center; color: var(--muted); font-size: 0.8rem; }
+      .readiness-bar i { height: 8px; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--green)); }
+      .command-box { margin-top: 18px; padding: 18px; border: 1px solid rgba(94,162,255,0.24); border-radius: 22px; background: rgba(13,24,48,0.72); }
+      .command-box h3 { margin: 0 0 4px; }
+      .command-box p { margin: 0 0 12px; color: var(--muted); font-size: 0.86rem; }
+      .command-input { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+      .command-input input { min-width: 0; width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 13px; background: rgba(7,17,31,0.75); color: var(--text); outline: none; }
+      .command-input input:focus { border-color: rgba(94,162,255,0.65); box-shadow: 0 0 0 3px rgba(94,162,255,0.12); }
+      .quick-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+      .quick-action { padding: 0.48rem 0.68rem; border: 1px solid var(--line); border-radius: 999px; background: rgba(148,163,184,0.05); color: var(--muted); cursor: pointer; font-size: 0.78rem; }
+      .quick-action:hover { color: var(--text); border-color: rgba(94,162,255,0.4); }
+      .memory-panel { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-top: 18px; padding: 16px 18px; border: 1px solid rgba(255,183,93,0.26); border-radius: 18px; background: rgba(255,183,93,0.07); }
+      .memory-panel strong { display: block; margin-bottom: 5px; }
+      .memory-panel p { margin: 0; color: var(--muted); font-size: 0.84rem; line-height: 1.5; }
+      .memory-panel button { flex: 0 0 auto; }
+
+      .metric-panel,
+      .leaderboard-panel,
+      .practice-panel,
+      .quest-panel,
+      .teacher-panel,
+      .progress-panel,
+      .tutor-panel,
+      .challenge-panel,
+      .achievement-panel {
+        background: rgba(13, 24, 48, 0.88);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 18px;
+      }
+
+      .metric-panel .header, .leaderboard-panel .header, .practice-panel .header, .quest-panel .header, .teacher-panel .header, .progress-panel .header, .tutor-panel .header, .challenge-panel .header, .achievement-panel .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .metric-panel h3, .leaderboard-panel h3, .practice-panel h3, .quest-panel h3, .teacher-panel h3, .progress-panel h3, .tutor-panel h3, .challenge-panel h3, .achievement-panel h3 {
+        margin: 0;
+      }
+
+      .mission-box {
+        display: grid;
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      .mission-card {
+        background: linear-gradient(135deg, rgba(94,162,255,0.12), rgba(157,101,255,0.08));
+        border: 1px solid rgba(94,162,255,0.22);
+        border-radius: 18px;
+        padding: 14px 16px;
+      }
+      .mission-card .meta {
+        display: flex; justify-content: space-between; align-items: center; gap: 8px; color: var(--muted); font-size: 0.8rem;
+      }
+      .mission-card .title { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; }
+      .mission-card strong { font-size: 1rem; }
+      .progress-meter {
+        height: 10px; background: rgba(148,163,184,0.12); border-radius: 999px; overflow: hidden; margin-top: 12px;
+      }
+      .progress-meter span {
+        display: block; width: 60%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--orange), var(--green));
+      }
+
+      .lesson-list, .leader-list, .quest-list, .achievement-list, .teacher-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .lesson-item, .leader-item, .quest-item, .achievement-item, .teacher-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        background: rgba(10, 18, 31, 0.65);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      .lesson-item .left, .leader-item .left, .teacher-item .left { display: flex; align-items: center; gap: 12px; }
+      .tiny-badge {
+        display: grid; place-items: center;
+        width: 36px; height: 36px; border-radius: 12px;
+        font-size: 0.8rem;
+        background: rgba(94,162,255,0.1);
+        border: 1px solid rgba(94,162,255,0.2);
+      }
+      .leader-item .rank { font-weight: 800; color: #ffdb7e; }
+      .leader-item small, .teacher-item small { color: var(--muted); }
+      .leader-item strong, .teacher-item strong { display: block; }
+
+      .practice-panel .question {
+        background: rgba(10, 18, 31, 0.64);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+      }
+      .answer-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .answer-option {
+        padding: 0.9rem 1rem;
+        border-radius: 14px;
+        border: 1px solid rgba(148,163,184,0.2);
+        background: rgba(148,163,184,0.04);
+        color: var(--text);
+        cursor: pointer;
+        text-align: left;
+      }
+      .answer-option:hover { border-color: rgba(94,162,255,0.32); }
+      .answer-option.correct { background: rgba(98,221,155,0.14); border-color: rgba(98,221,155,0.4); }
+      .answer-option.wrong { background: rgba(255,106,122,0.12); border-color: rgba(255,106,122,0.4); }
+
+      .tutor-panel .chat-wrap {
+        background: rgba(10,18,31,0.7);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 12px;
+      }
+      .chat-messages {
+        display: grid;
+        gap: 10px;
+        max-height: 240px;
+        overflow: auto;
+      }
+      .msg {
+        max-width: 82%;
+        padding: 10px 12px;
+        border-radius: 14px;
+        line-height: 1.5;
+      }
+      .msg.bot { background: rgba(94,162,255,0.1); border: 1px solid rgba(94,162,255,0.2); }
+      .msg.user { margin-left: auto; background: rgba(157,101,255,0.12); border: 1px solid rgba(157,101,255,0.24); }
+      .chat-input {
+        display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 12px;
+      }
+      .chat-input input {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.8);
+        padding: 0.8rem 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        color: var(--text);
+        outline: none;
+      }
+
+      .mini-cards {
+        display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 18px;
+      }
+      .mini-card {
+        padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: rgba(10,18,31,0.65);
+      }
+      .mini-card strong { display: block; font-size: 1.4rem; margin-top: 6px; }
+
+      .hero-cta, .link-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-weight: 700; cursor: pointer;
+      }
+      .link-btn { color: #dfeeff; }
+
+      .hidden { display: none !important; }
+
+      .auth-overlay {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: rgba(3, 10, 20, 0.8);
+        backdrop-filter: blur(12px);
+        z-index: 200;
+        padding: 20px;
+      }
+      .auth-card {
+        width: min(460px, 100%);
+        background: rgba(11, 20, 35, 0.98);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 28px;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.52);
+        padding: 26px;
+      }
+      .auth-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .auth-logo {
+        width: 52px; height: 52px; border-radius: 16px;
+        display: grid; place-items: center;
+        background: linear-gradient(135deg, var(--blue), var(--purple));
+        font-size: 1.4rem;
+        font-weight: 800;
+      }
+      .auth-brand {
+        font-size: 2rem; font-weight: 900; letter-spacing: -0.05em;
+        background: linear-gradient(135deg, #dfe9ff, #7bb6ff, #b590ff);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .auth-subtitle {
+        color: var(--muted);
+        text-align: center;
+        margin: 0 0 18px;
+      }
+      .auth-tabs {
+        display: flex;
+        gap: 12px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 18px;
+      }
+      .auth-tab {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        padding: 12px 10px;
+        font-weight: 700;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+      }
+      .auth-tab.active {
+        color: var(--blue);
+        border-bottom-color: var(--blue);
+      }
+      .auth-form { display: grid; gap: 12px; }
+      .auth-form label {
+        display: grid; gap: 8px;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .auth-form input {
+        width: 100%;
+        background: rgba(19, 31, 58, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 12px;
+        color: var(--text);
+        padding: 0.9rem 0.95rem;
+        outline: none;
+      }
+      .auth-form input:focus {
+        border-color: rgba(94, 162, 255, 0.7);
+        box-shadow: 0 0 0 3px rgba(94, 162, 255, 0.14);
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap .toggle-password {
+        position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+        background: transparent; border: none; color: var(--muted); cursor: pointer;
+      }
+      .auth-actions {
+        display: flex; justify-content: space-between; align-items: center; gap: 8px;
+        margin-top: 2px;
+      }
+      .text-link {
+        color: #8cc1ff; background: transparent; border: none; cursor: pointer; font-weight: 600;
+      }
+      .alert {
+        background: rgba(255, 106, 122, 0.08);
+        border: 1px solid rgba(255, 106, 122, 0.32);
+        color: #ffc1ca;
+        border-radius: 12px;
+        padding: 0.72rem 0.9rem;
+        font-size: 0.82rem;
+      }
+      .alert.success {
+        background: rgba(98, 221, 155, 0.08);
+        border-color: rgba(98, 221, 155, 0.32);
+        color: #c5f4d8;
+      }
+      .divider {
+        display: flex; align-items: center; gap: 12px;
+        color: var(--muted); font-size: 0.78rem; margin: 8px 0 2px;
+      }
+      .divider::before, .divider::after {
+        content: ""; display: block; flex: 1; height: 1px; background: rgba(148,163,184,0.2);
+      }
+      .auth-secondary {
+        width: 100%;
+        border: 1px solid rgba(148,163,184,0.25);
+        background: rgba(15, 23, 42, 0.85);
+        color: var(--text);
+      }
+      .otp-grid {
+        display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 10px;
+      }
+      .otp-grid input {
+        text-align: center; font-weight: 700; font-size: 1.4rem; padding: 0.8rem 0.4rem;
+      }
+      .verification-meta {
+        color: var(--muted); font-size: 0.82rem; text-align: center; margin-bottom: 10px;
+      }
+      .small-btn {
+        font-size: 0.8rem; padding: 0.66rem 0.9rem;
+      }
+      .success-box {
+        background: rgba(98, 221, 155, 0.08);
+        border: 1px solid rgba(98, 221, 155, 0.3);
+        border-radius: 18px;
+        padding: 18px;
+        text-align: center;
+      }
+      .success-box h3 { margin: 0 0 8px; font-size: 1.8rem; }
+
+      .demo-code {
+        margin-top: 8px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(94, 162, 255, 0.1);
+        border: 1px solid rgba(94, 162, 255, 0.25);
+        color: #dfeeff;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-align: center;
+      }
+
+      @media (max-width: 980px) {
+        .hero-grid, .dashboard-grid, .command-grid, .app-layout, .subject-grid { grid-template-columns: 1fr; }
+        .card-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+        .stats-row { grid-template-columns: repeat(2, minmax(0,1fr)); }
+        .sidebar { position: static; }
+        .auth-card {
+          width: min(92vw, 480px);
+          padding: 22px 18px;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .nav-links { display: none; }
+        .topbar .nav { padding: 0 8px; }
+        .cta-row { flex-direction: column; }
+        .mini-stats { gap: 12px; }
+        .top-strip { flex-direction: column; align-items: flex-start; }
+        .search-box { width: 100%; min-width: 0; }
+        .card-grid, .stats-row, .answer-grid, .readiness-grid { grid-template-columns: 1fr; }
+        .nav-actions { gap: 8px; }
+        .nav-actions .btn { padding: 0.7rem 0.9rem; font-size: 0.82rem; }
+        .app-layout { grid-template-columns: 1fr; }
+        .sidebar {
+          position: static;
+          padding: 12px 10px;
+        }
+        .nav-rail {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .nav-item { justify-content: center; }
+        .next-move, .metric-panel, .practice-panel, .tutor-panel, .progress-panel { padding: 16px; }
+        .health-panel { grid-template-columns: 1fr; text-align: center; }
+        .health-score { margin: 0 auto; }
+        .signal { text-align: left; }
+        .map-branches { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 480px) {
+        .container { width: min(100% - 18px, 1180px); }
+        .auth-card { border-radius: 20px; }
+        .auth-brand { font-size: 1.7rem; }
+        .otp-grid { gap: 6px; }
+        .nav-rail { grid-template-columns: 1fr; }
+        .top-strip { padding: 14px; }
+        .stats-row { grid-template-columns: 1fr; }
+        .profile-chip { align-items: flex-start; flex-wrap: wrap; }
+        .profile-chip .logout-btn { margin-left: 54px; margin-top: -4px; }
+        .next-move h3 { font-size: 1.35rem; }
+        .mission-card .title { align-items: flex-start; flex-direction: column; }
+        .mission-card .title .btn { width: 100%; }
+        .readiness-bar { grid-template-columns: 86px 1fr 34px; gap: 7px; }
+        .command-input { grid-template-columns: 1fr; }
+        .command-input .btn { width: 100%; }
+        .memory-panel { flex-direction: column; }
+        .memory-panel button { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">
+          <div class="logo"><span class="brand-mark">A</span></div>
+          <span>Atom</span>
+        </div>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="#why">Why Atom</a>
+          <a href="#subjects">Subjects</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#schools">Schools</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="btn btn-secondary" id="showLoginBtn">Log in</button>
+          <button class="btn btn-primary" id="showSignupBtn">Sign up</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="eyebrow">⚡ Ghana-first learning that feels like a game</div>
+            <h1>Learning just got <span class="gradient-text">addictive.</span></h1>
+            <p>
+              Master your subjects, complete short lessons, solve challenges, ask Atom for help,
+              earn XP, maintain streaks, and level up your academic journey.
+            </p>
+            <div class="cta-row">
+              <button class="btn btn-primary" id="primaryCta">Start Learning</button>
+              <button class="btn btn-secondary" id="secondaryCta">See How It Works</button>
+            </div>
+            <div class="mini-stats">
+              <div><strong>32k+</strong>students learning</div>
+              <div><strong>91%</strong>weekly streak retention</div>
+              <div><strong>4.9/5</strong>student rating</div>
+            </div>
+          </div>
+
+          <div class="dashboard-preview" aria-label="Student dashboard preview">
+            <div class="preview-topbar">
+              <div class="topbar-dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+              </div>
+              <div class="badge">🔥 17 day streak</div>
+            </div>
+            <div class="preview-body">
+              <div class="preview-grid">
+                <div class="panel">
+                  <div class="xp-row">
+                    <div>
+                      <div style="color: var(--muted); font-size: 0.8rem;">Good morning, Ama 👋</div>
+                      <strong style="font-size: 1.3rem;">Level 12</strong>
+                    </div>
+                    <div style="text-align: right; color: var(--muted); font-size: 0.82rem;">
+                      <div>1,840 XP</div>
+                      <div>+90 today</div>
+                    </div>
+                  </div>
+                  <div class="xp-bar"><span></span></div>
+                  <div class="lesson-card">
+                    <div class="meta" style="display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.75rem;">
+                      <span>Daily Mission</span>
+                      <span>60%</span>
+                    </div>
+                    <h3>Complete 3 learning activities</h3>
+                    <div class="progress-list">
+                      <div class="progress-item"><div><div class="label">Mathematics</div><strong>Linear Equations</strong></div><span>78% mastered</span></div>
+                      <div class="progress-item"><div><div class="label">Daily Challenge</div><strong>60-Second Quiz</strong></div><span>+80 XP</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div style="color: var(--muted); font-size: 0.8rem; margin-bottom: 10px;">Leaderboard</div>
+                  <div class="progress-list">
+                    <div class="progress-item"><div><div class="label">1</div><strong>Kwame</strong></div><span>2,410 XP</span></div>
+                    <div class="progress-item"><div><div class="label">2</div><strong>Ama</strong></div><span>2,260 XP</span></div>
+                    <div class="progress-item"><div><div class="label">3</div><strong>Yaw</strong></div><span>2,080 XP</span></div>
+                  </div>
+                  <div class="mini-graph" aria-label="Study activity graph">
+                    <span style="height: 35%"></span>
+                    <span style="height: 55%"></span>
+                    <span style="height: 42%"></span>
+                    <span style="height: 68%"></span>
+                    <span style="height: 58%"></span>
+                    <span style="height: 80%"></span>
+                    <span style="height: 100%"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why">
+        <div class="container">
+          <div class="section-head">
+            <h2>Why Atom?</h2>
+            <p>Built for students who need clarity, momentum, and measurable progress.</p>
+          </div>
+          <div class="card-grid">
+            <article class="feature-card">
+              <div class="feature-icon">🧠</div>
+              <h3>Learn smarter</h3>
+              <p>AI-powered explanations tailored to weak topics and personal learning pace.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🎮</div>
+              <h3>Progress feels like a game</h3>
+              <p>XP, levels, quests, leagues, rewards and achievement loops keep students coming back.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🎯</div>
+              <h3>Know exactly what to study</h3>
+              <p>Targeted practice adapts to mastery gaps and includes exam-style preparation.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🇬🇭</div>
+              <h3>Built for Ghana</h3>
+              <p>Curriculum-aligned learning for JHS and SHS, including BECE and WASSCE pathways.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="subjects">
+        <div class="container">
+          <div class="section-head">
+            <h2>Subjects that students actually want to master</h2>
+            <p>From core STEM subjects to humanities and exam prep.</p>
+          </div>
+          <div class="subject-grid">
+            <article class="subject-card">
+              <span class="tag">Core</span>
+              <h3>Mathematics</h3>
+              <p>Algebra, fractions, geometry, and exam problem-solving with adaptive practice.</p>
+              <div class="pill-row">
+                <span class="pill">Algebra</span>
+                <span class="pill">Trigonometry</span>
+              </div>
+            </article>
+            <article class="subject-card">
+              <span class="tag">Language</span>
+              <h3>English Language</h3>
+              <p>Comprehension, grammar, essay writing, and oral communication practice.</p>
+              <div class="pill-row">
+                <span class="pill">Grammar</span>
+                <span class="pill">Composition</span>
+              </div>
+            </article>
+            <article class="subject-card">
+              <span class="tag">Science</span>
+              <h3>Integrated Science</h3>
+              <p>Short, visual lessons with concept checks and practical experiment support.</p>
+              <div class="pill-row">
+                <span class="pill">Cells</span>
+                <span class="pill">Energy</span>
+              </div>
+            </article>
+            <article class="subject-card">
+              <span class="tag">Social</span>
+              <h3>Social Studies</h3>
+              <p>Make civic and historical learning easier through guided practice and recall.</p>
+              <div class="pill-row">
+                <span class="pill">Civics</span>
+                <span class="pill">History</span>
+              </div>
+            </article>
+            <article class="subject-card">
+              <span class="tag">Tech</span>
+              <h3>ICT</h3>
+              <p>Digital literacy, productivity, and foundational computing confidence.</p>
+              <div class="pill-row">
+                <span class="pill">Typing</span>
+                <span class="pill">Excel</span>
+              </div>
+            </article>
+            <article class="subject-card">
+              <span class="tag">Exam Prep</span>
+              <h3>WASSCE Prep</h3>
+              <p>Timed practice papers, recovery plans, and weekly performance feedback.</p>
+              <div class="pill-row">
+                <span class="pill">Past qns</span>
+                <span class="pill">Mock exams</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works">
+        <div class="container">
+          <div class="section-head">
+            <h2>How Atom works</h2>
+            <p>Fast lessons. Small wins. Repeatable momentum.</p>
+          </div>
+          <div class="card-grid">
+            <article class="feature-card">
+              <div class="feature-icon">1</div>
+              <h3>Choose your level</h3>
+              <p>Students begin by selecting JHS or SHS level and their target: grades, BECE, or WASSCE.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">2</div>
+              <h3>Learn in short bursts</h3>
+              <p>Every concept is broken into micro-lessons with examples, quick checks, and feedback.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">3</div>
+              <h3>Practice and improve</h3>
+              <p>Each strength or weakness drives the next practice set, keeping the loop adaptive.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">4</div>
+              <h3>Earn XP and level up</h3>
+              <p>Students collect XP, maintain streaks, unlock badges, and compete in leagues.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing">
+        <div class="container">
+          <div class="section-head">
+            <h2>Simple plans for students and schools</h2>
+            <p>Start free, upgrade when learning needs become serious.</p>
+          </div>
+          <div class="card-grid">
+            <article class="feature-card">
+              <div class="feature-icon">🆓</div>
+              <h3>Starter</h3>
+              <p>Free access to core lessons, daily missions, and 1 AI tutor session per day.</p>
+              <div style="margin-top: 14px; font-size: 1.8rem; font-weight: 800;">GHS 0</div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3>Plus</h3>
+              <p>Unlock full curriculum progress, weekly analytics, and more exam-style practice.</p>
+              <div style="margin-top: 14px; font-size: 1.8rem; font-weight: 800;">GHS 25</div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🏫</div>
+              <h3>School</h3>
+              <p>Bulk access for institutions, teacher dashboards, and class progress tracking.</p>
+              <div style="margin-top: 14px; font-size: 1.8rem; font-weight: 800;">Custom</div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">👨‍🏫</div>
+              <h3>Parent Pass</h3>
+              <p>Give parents simple weekly insights and targeted recommendations for growth.</p>
+              <div style="margin-top: 14px; font-size: 1.8rem; font-weight: 800;">GHS 15</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="schools" class="hidden">
+        <div class="container">
+          <div class="section-head">
+            <h2>Built for schools and parents</h2>
+            <p>Serious education analytics without the noisy gamification.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-shell" id="appShell">
+        <div class="container app-layout">
+          <aside class="sidebar">
+            <div class="profile-chip">
+              <div class="avatar" id="profileAvatar">A</div>
+              <div>
+                <h4 id="profileName">Your profile</h4>
+                <p id="profileMeta">@student • Level 1 • 0 XP</p>
+                <p class="profile-email" id="profileEmail">your@email.com</p>
+              </div>
+              <button class="logout-btn" id="logoutBtn" type="button">Log out</button>
+            </div>
+            <nav class="nav-rail" aria-label="Student app navigation">
+              <div class="nav-item active" data-view="dashboard">🏠 Home</div>
+              <div class="nav-item" data-view="learn">📚 Learn</div>
+              <div class="nav-item" data-view="practice">🧪 Practice</div>
+              <div class="nav-item" data-view="challenges">🎯 Missions</div>
+              <div class="nav-item" data-view="tutor">✨ Atom AI</div>
+              <div class="nav-item" data-view="leaderboard">⚔ Arena</div>
+              <div class="nav-item" data-view="progress">📊 Insights</div>
+              <div class="nav-item" data-view="teachers">👨‍🏫 Teachers</div>
+            </nav>
+          </aside>
+
+          <div class="content">
+            <div class="top-strip">
+              <h2 id="pageTitle">Home</h2>
+              <label class="search-box">
+                <span>🔎</span>
+                <input type="text" placeholder="Search lessons or topics" />
+              </label>
+            </div>
+
+            <div id="appContent"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const appContent = document.getElementById('appContent');
+      const pageTitle = document.getElementById('pageTitle');
+      const appShell = document.getElementById('appShell');
+      const authButtons = [
+        { button: document.getElementById('showLoginBtn'), mode: 'login' },
+        { button: document.getElementById('showSignupBtn'), mode: 'signup' },
+        { button: document.getElementById('primaryCta'), mode: 'signup' },
+      ];
+
+      const onboardingSteps = [
+        { title: 'Welcome to Atom 🚀', desc: 'Let’s build your learning profile.' },
+        { title: 'Choose your level', desc: 'JHS 1 • JHS 2 • JHS 3 • SHS 1 • SHS 2 • SHS 3' },
+        { title: 'Pick your subjects', desc: 'Mathematics, English, Science, Social Studies, ICT, Biology, Chemistry, Physics.' },
+        { title: 'Set a learning goal', desc: 'Improve grades • BECE • WASSCE • Become top of class' },
+        { title: 'Daily goal', desc: '10, 20, 30, 45 or 60 minute study plan' }
+      ];
+
+      const onboardingSelections = {
+        level: null,
+        subjects: [],
+        goal: null,
+        time: null
+      };
+
+      let currentStep = 0;
+      const demoUsers = [
+        {
+          id: 1,
+          name: 'Ama Mensah',
+          username: 'ama_mensah',
+          email: 'ama@atom.dev',
+          phone: '+233244123456',
+          password: 'atom123',
+          verified: true,
+          role: 'student',
+          level: 'Level 12',
+          xp: 1840,
+          streak: 17,
+          atoms: 640
+        },
+        {
+          id: 2,
+          name: 'Kojo Appiah',
+          username: 'kojo_appiah',
+          email: 'kojo@atom.dev',
+          phone: '+233553456789',
+          password: 'atom123',
+          verified: true,
+          role: 'student',
+          level: 'Level 8',
+          xp: 1260,
+          streak: 9,
+          atoms: 390
+        }
+      ];
+
+      const authState = {
+        mode: 'login',
+        pendingUser: null,
+        otpCode: '482169',
+        resetMode: false,
+        lastNotice: ''
+      };
+
+      function createAuthModal(mode = 'login') {
+        if (document.getElementById('authOverlay')) return;
+
+        authState.mode = mode;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'authOverlay';
+        overlay.className = 'auth-overlay';
+        overlay.innerHTML = `
+          <div class="auth-card" id="authCard">
+            <div class="auth-header">
+              <div class="auth-logo">A</div>
+              <div class="auth-brand">Atom</div>
+            </div>
+            <p class="auth-subtitle">Learning just got addictive.</p>
+            <div class="auth-tabs">
+              <button class="auth-tab active" data-auth="login" type="button">Log In</button>
+              <button class="auth-tab" data-auth="signup" type="button">Create Account</button>
+            </div>
+            <div id="authBody"></div>
+          </div>
+        `;
+
+        document.body.appendChild(overlay);
+        attachAuthEvents();
+        renderAuthForm();
+      }
+
+      function renderAuthForm() {
+        const authBody = document.getElementById('authBody');
+        if (!authBody) return;
+
+        const isLogin = authState.mode === 'login';
+        if (isLogin) {
+          authBody.innerHTML = `
+            <div class="auth-form">
+              <div id="authNotice" class="alert hidden"></div>
+              <label>
+                Email or phone number
+                <input id="loginIdentifier" type="text" value="ama@atom.dev" placeholder="you@example.com or +233..." />
+              </label>
+              <label>
+                Password
+                <div class="input-wrap">
+                  <input id="loginPassword" type="password" value="atom123" placeholder="••••••••••" />
+                  <button class="toggle-password" type="button" data-toggle="loginPassword">👁</button>
+                </div>
+              </label>
+              <div class="auth-actions">
+                <span></span>
+                <button type="button" class="text-link" id="forgotPasswordBtn">Forgot your password?</button>
+              </div>
+              <button class="btn btn-primary" id="loginSubmitBtn" type="button">Log In</button>
+              <div class="divider">or continue with</div>
+              <button class="btn auth-secondary" id="googleLoginBtn" type="button">Continue with Google</button>
+              <div style="text-align:center; color: var(--muted); margin-top:4px; font-size:0.9rem;">
+                Don’t have an Atom account? <button class="text-link" id="switchToSignupBtn" type="button">Create one</button>
+              </div>
+            </div>
+          `;
+        } else {
+          authBody.innerHTML = `
+            <div class="auth-form">
+              <div id="authNotice" class="alert hidden"></div>
+              <label>
+                Full name
+                <input id="signupName" type="text" placeholder="Ama Mensah" />
+              </label>
+              <label>
+                Email
+                <input id="signupEmail" type="email" placeholder="you@example.com" />
+              </label>
+              <label>
+                Phone number
+                <input id="signupPhone" type="tel" placeholder="+233 24 123 4567" />
+              </label>
+              <label>
+                Password
+                <div class="input-wrap">
+                  <input id="signupPassword" type="password" placeholder="Create a strong password" />
+                  <button class="toggle-password" type="button" data-toggle="signupPassword">👁</button>
+                </div>
+              </label>
+              <label>
+                Confirm password
+                <div class="input-wrap">
+                  <input id="signupConfirm" type="password" placeholder="Enter your password again" />
+                  <button class="toggle-password" type="button" data-toggle="signupConfirm">👁</button>
+                </div>
+              </label>
+              <button class="btn btn-primary" id="signupSubmitBtn" type="button">Continue</button>
+              <div style="text-align:center; color: var(--muted); margin-top:4px; font-size:0.9rem;">
+                Already have an account? <button class="text-link" id="switchToLoginBtn" type="button">Log in</button>
+              </div>
+            </div>
+          `;
+        }
+
+        attachAuthEvents();
+      }
+
+      function showAuthNotice(message, type = 'error') {
+        const notice = document.getElementById('authNotice');
+        if (!notice) return;
+        notice.textContent = message;
+        notice.classList.remove('hidden', 'success');
+        if (type === 'success') notice.classList.add('success');
+      }
+
+      function hideAuthNotice() {
+        const notice = document.getElementById('authNotice');
+        if (notice) {
+          notice.classList.add('hidden');
+          notice.textContent = '';
+        }
+      }
+
+      function setAuthMode(mode) {
+        authState.mode = mode;
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.dataset.auth === mode);
+        });
+        renderAuthForm();
+      }
+
+      function attachAuthEvents() {
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+          tab.onclick = () => setAuthMode(tab.dataset.auth);
+        });
+
+        document.getElementById('switchToSignupBtn')?.addEventListener('click', () => setAuthMode('signup'));
+        document.getElementById('switchToLoginBtn')?.addEventListener('click', () => setAuthMode('login'));
+        document.getElementById('forgotPasswordBtn')?.addEventListener('click', () => openPasswordReset());
+
+        document.getElementById('loginSubmitBtn')?.addEventListener('click', handleLogin);
+        document.getElementById('signupSubmitBtn')?.addEventListener('click', handleSignup);
+        document.getElementById('googleLoginBtn')?.addEventListener('click', handleGoogleLogin);
+
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.toggle);
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.textContent = isPassword ? '🙈' : '👁';
+          });
+        });
+      }
+
+      function findUserByIdentifier(identifier) {
+        const normalized = identifier.trim().toLowerCase();
+        return demoUsers.find(user =>
+          user.email.toLowerCase() === normalized || user.phone === normalized || user.email.toLowerCase().includes(normalized)
+        ) || null;
+      }
+
+      function handleLogin() {
+        const identifier = document.getElementById('loginIdentifier')?.value || '';
+        const password = document.getElementById('loginPassword')?.value || '';
+
+        if (!identifier || !password) {
+          showAuthNotice('Please enter your email or phone and password.');
+          return;
+        }
+
+        const user = findUserByIdentifier(identifier);
+        if (!user) {
+          showAuthNotice('This account does not exist. Please create a new one.');
+          return;
+        }
+
+        if (user.password !== password) {
+          showAuthNotice('Incorrect password. Please check your details and try again.');
+          return;
+        }
+
+        if (!user.verified) {
+          authState.pendingUser = user;
+          showAuthNotice('Your account is not verified yet. We sent a verification code to your email.', 'success');
+          openVerificationScreen(user);
+          return;
+        }
+
+        authState.pendingUser = user;
+        closeAuthModal();
+        showPersonalDashboard();
+      }
+
+      function handleGoogleLogin() {
+        const googleUser = demoUsers.find(user => user.email === 'ama@atom.dev');
+        if (!googleUser) {
+          showAuthNotice('Google sign-in is unavailable in this demo.');
+          return;
+        }
+
+        googleUser.verified = true;
+        authState.pendingUser = googleUser;
+        showAuthNotice('Google sign-in successful. Opening your dashboard...', 'success');
+        setTimeout(() => {
+          closeAuthModal();
+          showPersonalDashboard();
+        }, 350);
+      }
+
+      function handleSignup() {
+        const name = document.getElementById('signupName')?.value.trim() || '';
+        const email = document.getElementById('signupEmail')?.value.trim() || '';
+        const phone = document.getElementById('signupPhone')?.value.trim() || '';
+        const password = document.getElementById('signupPassword')?.value || '';
+        const confirm = document.getElementById('signupConfirm')?.value || '';
+
+        if (!name || !email || !phone || !password || !confirm) {
+          showAuthNotice('Please complete all required fields.');
+          return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showAuthNotice('Please enter a valid email address.');
+          return;
+        }
+
+        if (password.length < 8) {
+          showAuthNotice('Your password must be at least 8 characters long.');
+          return;
+        }
+
+        if (password !== confirm) {
+          showAuthNotice('Passwords do not match. Please try again.');
+          return;
+        }
+
+        if (findUserByIdentifier(email)) {
+          showAuthNotice('An Atom account already exists with this email.');
+          return;
+        }
+
+        const newUser = {
+          id: Date.now(),
+          name,
+          username: name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''),
+          email,
+          phone,
+          password,
+          verified: false,
+          role: 'student',
+          level: 'Level 1',
+          xp: 0,
+          streak: 0,
+          atoms: 0
+        };
+
+        demoUsers.push(newUser);
+        authState.pendingUser = newUser;
+        authState.otpCode = String(Math.floor(100000 + Math.random() * 900000));
+        openVerificationScreen(newUser);
+      }
+
+      function renderOtpInputs() {
+        const body = document.getElementById('authBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="auth-form">
+            <div class="success-box" style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+              <div style="font-size: 2rem;">🎉</div>
+              <div>
+                <h3>Verify your account</h3>
+                <p style="margin: 0; color: var(--muted);">Demo email delivery: a 6-digit verification code was sent to ${authState.pendingUser?.email || 'your email'}.</p>
+              </div>
+            </div>
+            <div class="demo-code">${authState.otpCode}</div>
+            <div class="verification-meta">Enter the 6-digit code</div>
+            <div class="otp-grid">
+              ${Array.from({ length: 6 }, (_, index) => `
+                <input id="otp-${index}" maxlength="1" inputmode="numeric" pattern="[0-9]*" aria-label="OTP digit ${index + 1}" />
+              `).join('')}
+            </div>
+            <button class="btn btn-primary" id="verifyOtpBtn" type="button">Verify</button>
+            <div style="text-align:center; color: var(--muted); font-size:0.85rem;">
+              Didn’t receive the code? <button class="text-link" id="resendOtpBtn" type="button">Resend code</button>
+            </div>
+            <div id="otpNotice" class="alert hidden"></div>
+          </div>
+        `;
+
+        const otpInputs = [...document.querySelectorAll('.otp-grid input')];
+        otpInputs.forEach((input, index) => {
+          input.addEventListener('input', (event) => {
+            const value = event.target.value.replace(/\D/g, '').slice(0, 1);
+            event.target.value = value;
+            if (value && index < otpInputs.length - 1) otpInputs[index + 1].focus();
+          });
+          input.addEventListener('keydown', (event) => {
+            if (event.key === 'Backspace' && !input.value && index > 0) otpInputs[index - 1].focus();
+          });
+        });
+
+        document.getElementById('verifyOtpBtn').addEventListener('click', verifyOtpCode);
+        document.getElementById('resendOtpBtn').addEventListener('click', () => {
+          authState.otpCode = String(Math.floor(100000 + Math.random() * 900000));
+          const demoCode = document.querySelector('.demo-code');
+          if (demoCode) {
+            demoCode.textContent = authState.otpCode;
+          }
+          showOtpNotice('A new verification code has been sent. Demo code updated below.', 'success');
+        });
+      }
+
+      function showOtpNotice(message, type = 'error') {
+        const notice = document.getElementById('otpNotice');
+        if (!notice) return;
+        notice.textContent = message;
+        notice.classList.remove('hidden', 'success');
+        if (type === 'success') notice.classList.add('success');
+      }
+
+      function verifyOtpCode() {
+        const otp = [...document.querySelectorAll('.otp-grid input')].map(input => input.value).join('');
+        if (otp.length !== 6) {
+          showOtpNotice('Please enter the full 6-digit code.');
+          return;
+        }
+
+        if (otp !== authState.otpCode) {
+          showOtpNotice('That code is not correct. Check your email and try again.');
+          return;
+        }
+
+        const user = authState.pendingUser;
+        if (!user) return;
+
+        user.verified = true;
+        showOtpNotice('Your account has been verified successfully.', 'success');
+        setTimeout(() => {
+          showVerifiedSuccess(user);
+        }, 500);
+      }
+
+      function showVerifiedSuccess(user) {
+        const body = document.getElementById('authBody');
+        if (!body) return;
+        body.innerHTML = `
+          <div class="success-box">
+            <div style="font-size: 2.5rem; margin-bottom: 8px;">🎉</div>
+            <h3>You're verified!</h3>
+            <p style="margin: 0 0 16px; color: var(--muted);">Welcome to Atom, ${user.name.split(' ')[0]}.</p>
+            <button class="btn btn-primary" id="goToOnboardingBtn" type="button">Build My Learning Profile →</button>
+          </div>
+        `;
+
+        document.getElementById('goToOnboardingBtn')?.addEventListener('click', () => {
+          document.body.classList.add('app-user');
+          closeAuthModal();
+          openOnboarding();
+        });
+      }
+
+      function openVerificationScreen(user) {
+        authState.pendingUser = user;
+        authState.mode = 'login';
+        renderOtpInputs();
+      }
+
+      function openPasswordReset() {
+        const body = document.getElementById('authBody');
+        if (!body) return;
+        body.innerHTML = `
+          <div class="auth-form">
+            <div id="authNotice" class="alert hidden"></div>
+            <h3 style="margin: 0; font-size: 1.8rem; letter-spacing: -0.05em;">Reset your password</h3>
+            <label>
+              Email associated with your Atom account
+              <input id="resetEmail" type="email" placeholder="you@example.com" />
+            </label>
+            <button class="btn btn-primary" id="sendResetBtn" type="button">Send Reset Code</button>
+            <div style="text-align:center; color: var(--muted); font-size:0.85rem;">
+              <button class="text-link" id="backToLoginBtn" type="button">Back to login</button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('sendResetBtn').addEventListener('click', () => {
+          const email = document.getElementById('resetEmail')?.value.trim() || '';
+          const user = findUserByIdentifier(email);
+          if (!user) {
+            showAuthNotice('We could not find an Atom account with that email.');
+            return;
+          }
+          authState.pendingUser = user;
+          showAuthNotice('A reset code has been sent to your email.', 'success');
+          setTimeout(() => {
+            openResetOtpScreen(user);
+          }, 500);
+        });
+
+        document.getElementById('backToLoginBtn').addEventListener('click', () => {
+          authState.mode = 'login';
+          renderAuthForm();
+        });
+      }
+
+      function openResetOtpScreen(user) {
+        const body = document.getElementById('authBody');
+        if (!body) return;
+        body.innerHTML = `
+          <div class="auth-form">
+            <div id="authNotice" class="alert hidden"></div>
+            <h3 style="margin: 0; font-size: 1.8rem; letter-spacing: -0.05em;">Set a new password</h3>
+            <p class="auth-subtitle" style="margin: 4px 0 12px;">Check your email for the verification code.</p>
+            <label>
+              Verification code
+              <input id="resetCode" type="text" maxlength="6" placeholder="123456" />
+            </label>
+            <label>
+              New password
+              <div class="input-wrap">
+                <input id="newPassword" type="password" placeholder="Enter a new password" />
+                <button class="toggle-password" type="button" data-toggle="newPassword">👁</button>
+              </div>
+            </label>
+            <label>
+              Confirm password
+              <div class="input-wrap">
+                <input id="newPasswordConfirm" type="password" placeholder="Confirm your new password" />
+                <button class="toggle-password" type="button" data-toggle="newPasswordConfirm">👁</button>
+              </div>
+            </label>
+            <button class="btn btn-primary" id="confirmResetBtn" type="button">Reset Password</button>
+          </div>
+        `;
+
+        document.getElementById('confirmResetBtn').addEventListener('click', () => {
+          const code = document.getElementById('resetCode')?.value.trim() || '';
+          const newPassword = document.getElementById('newPassword')?.value || '';
+          const newPasswordConfirm = document.getElementById('newPasswordConfirm')?.value || '';
+          if (code.length !== 6 || newPassword.length < 8 || newPassword !== newPasswordConfirm) {
+            showAuthNotice('Please provide a valid code and matching new password.');
+            return;
+          }
+          user.password = newPassword;
+          showAuthNotice('Password updated successfully. You can now log in.', 'success');
+          setTimeout(() => {
+            authState.mode = 'login';
+            renderAuthForm();
+          }, 700);
+        });
+
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.toggle);
+            if (!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
+            btn.textContent = input.type === 'password' ? '👁' : '🙈';
+          });
+        });
+      }
+
+      function closeAuthModal() {
+        const overlay = document.getElementById('authOverlay');
+        if (overlay) overlay.remove();
+      }
+
+      function logout() {
+        authState.pendingUser = null;
+        document.body.classList.remove('app-user');
+        appShell.classList.remove('visible');
+        closeAuthModal();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function showPersonalDashboard() {
+        document.body.classList.add('app-user');
+        document.body.classList.remove('marketing-view');
+        appShell.classList.add('visible');
+        renderApp('dashboard');
+      }
+
+      function openOnboarding() {
+        const modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.background = 'rgba(3, 7, 18, 0.86)';
+        modal.style.display = 'grid';
+        modal.style.placeItems = 'center';
+        modal.style.zIndex = '100';
+
+        const renderChoiceButtons = () => {
+          if (currentStep === 1) {
+            return ['JHS 1', 'JHS 2', 'JHS 3', 'SHS 1', 'SHS 2', 'SHS 3'].map(level => `
+              <button class="btn ${onboardingSelections.level === level ? 'btn-primary' : 'btn-secondary'}" data-choice="${level}" data-type="level" style="padding:0.75rem 1rem;">${level}</button>
+            `).join('');
+          }
+          if (currentStep === 2) {
+            return ['Mathematics', 'English', 'Science', 'Social Studies', 'ICT', 'Biology', 'Chemistry', 'Physics', 'Economics', 'Geography', 'Government'].map(subject => `
+              <button class="btn ${onboardingSelections.subjects.includes(subject) ? 'btn-primary' : 'btn-secondary'}" data-choice="${subject}" data-type="subject" style="padding:0.7rem 0.9rem;">${subject}</button>
+            `).join('');
+          }
+          if (currentStep === 3) {
+            return ['Improve my grades', 'BECE', 'WASSCE', 'Top of my class', 'Learn for myself'].map(goal => `
+              <button class="btn ${onboardingSelections.goal === goal ? 'btn-primary' : 'btn-secondary'}" data-choice="${goal}" data-type="goal" style="padding:0.7rem 0.9rem;">${goal}</button>
+            `).join('');
+          }
+          if (currentStep === 4) {
+            return ['10 min', '20 min', '30 min', '45 min', '60 min'].map(time => `
+              <button class="btn ${onboardingSelections.time === time ? 'btn-primary' : 'btn-secondary'}" data-choice="${time}" data-type="time" style="padding:0.7rem 0.9rem;">${time}</button>
+            `).join('');
+          }
+          return '';
+        };
+
+        const summary = `
+          <div style="margin-top: 18px; padding: 14px 16px; border: 1px solid rgba(148,163,184,0.2); border-radius: 16px; background: rgba(15,23,42,0.8); color: #dfeeff;">
+            <div style="font-size: 0.8rem; color: #a5b5d1; margin-bottom: 8px;">Your selections</div>
+            <div style="display:flex; flex-wrap: wrap; gap: 8px;">
+              ${onboardingSelections.level ? `<span class="pill">Level: ${onboardingSelections.level}</span>` : ''}
+              ${onboardingSelections.subjects.length ? onboardingSelections.subjects.map(s => `<span class="pill">${s}</span>`).join('') : ''}
+              ${onboardingSelections.goal ? `<span class="pill">Goal: ${onboardingSelections.goal}</span>` : ''}
+              ${onboardingSelections.time ? `<span class="pill">Time: ${onboardingSelections.time}</span>` : ''}
+            </div>
+          </div>
+        `;
+
+        modal.innerHTML = `
+          <div style="width: min(560px, calc(100% - 24px)); background: rgba(11, 20, 35, 0.96); border:1px solid rgba(148,163,184,0.2); border-radius: 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); padding: 26px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 18px;">
+              <div style="font-size: 1.1rem; font-weight: 800;">Welcome to Atom</div>
+              <button id="closeModalBtn" style="background: rgba(148,163,184,0.08); border:1px solid rgba(148,163,184,0.2); color: white; border-radius: 12px; padding: 0.5rem 0.7rem; cursor:pointer;">✕</button>
+            </div>
+            <div style="display:flex; gap: 8px; margin-bottom: 22px;">
+              ${onboardingSteps.map((_, i) => `<span style="display:block; height: 8px; border-radius: 999px; flex:1; background: ${i === currentStep ? 'linear-gradient(90deg,#5ea2ff,#9d65ff)' : 'rgba(148,163,184,0.15)'};"></span>`).join('')}
+            </div>
+            <h3 style="margin: 0 0 10px; font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -0.05em;">${onboardingSteps[currentStep].title}</h3>
+            <p style="margin: 0 0 20px; color: #a5b5d1; line-height: 1.7;">${onboardingSteps[currentStep].desc}</p>
+            <div style="display:flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+              ${renderChoiceButtons()}
+            </div>
+            ${summary}
+            <div style="display:flex; justify-content:space-between; align-items:center; gap: 12px; margin-top: 18px;">
+              <button class="btn btn-secondary" id="prevStepBtn" ${currentStep === 0 ? 'disabled' : ''} style="opacity: ${currentStep === 0 ? 0.5 : 1};">Back</button>
+              <button class="btn btn-primary" id="nextStepBtn">${currentStep === onboardingSteps.length - 1 ? 'Start learning' : 'Next'}</button>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        modal.querySelectorAll('[data-type]').forEach(button => {
+          button.addEventListener('click', () => {
+            const type = button.dataset.type;
+            const value = button.dataset.choice;
+
+            if (type === 'level') {
+              onboardingSelections.level = value;
+            }
+            if (type === 'subject') {
+              if (onboardingSelections.subjects.includes(value)) {
+                onboardingSelections.subjects = onboardingSelections.subjects.filter(item => item !== value);
+              } else {
+                onboardingSelections.subjects.push(value);
+              }
+            }
+            if (type === 'goal') {
+              onboardingSelections.goal = value;
+            }
+            if (type === 'time') {
+              onboardingSelections.time = value;
+            }
+
+            modal.remove();
+            openOnboarding();
+          });
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+          modal.remove();
+          showPersonalDashboard();
+        });
+
+        document.getElementById('prevStepBtn').addEventListener('click', () => {
+          if (currentStep > 0) {
+            currentStep -= 1;
+            modal.remove();
+            openOnboarding();
+          }
+        });
+
+        document.getElementById('nextStepBtn').addEventListener('click', () => {
+          if (currentStep === 1 && !onboardingSelections.level) {
+            return;
+          }
+          if (currentStep === 2 && onboardingSelections.subjects.length === 0) {
+            return;
+          }
+          if (currentStep === 3 && !onboardingSelections.goal) {
+            return;
+          }
+          if (currentStep === 4 && !onboardingSelections.time) {
+            return;
+          }
+
+          if (currentStep < onboardingSteps.length - 1) {
+            currentStep += 1;
+            modal.remove();
+            openOnboarding();
+          } else {
+            modal.remove();
+            showPersonalDashboard();
+          }
+        });
+      }
+
+      const leaderboardData = [
+        { rank: 1, name: 'Kwame', xp: 2410 },
+        { rank: 2, name: 'Ama', xp: 2260 },
+        { rank: 3, name: 'Yaw', xp: 2080 },
+        { rank: 4, name: 'You', xp: 1840 },
+        { rank: 5, name: 'Efua', xp: 1750 }
+      ];
+
+      const lessonsData = [
+        { title: 'Linear Equations', level: 'Mathematics', progress: '78% mastered', badge: 'MATH' },
+        { title: 'Fractions Recovery', level: 'Mathematics', progress: 'New', badge: 'FIX' },
+        { title: 'Photosynthesis', level: 'Science', progress: '62% mastered', badge: 'BIO' },
+        { title: 'Essay Planning', level: 'English', progress: '84% mastered', badge: 'ENG' }
+      ];
+
+      const questData = [
+        { title: 'Daily mission', detail: 'Complete 3 learning activities', reward: '+100 XP' },
+        { title: 'Mathematics quest', detail: 'Master 5 Algebra skills', reward: '+250 XP' },
+        { title: 'Weekly goal', detail: 'Earn 1,000 XP this week', reward: '+350 XP' }
+      ];
+
+      const achievementData = [
+        { title: 'First Step', detail: 'Complete your first lesson', icon: '🏆' },
+        { title: 'On Fire', detail: 'Maintain a 7-day streak', icon: '🔥' },
+        { title: 'Math Machine', detail: 'Master 25 Maths skills', icon: '🧮' },
+        { title: 'Perfect Week', detail: 'Complete every daily mission', icon: '👑' }
+      ];
+
+      const teacherData = [
+        { name: 'Mrs. Owusu', class: 'JHS 2A', status: 'Average mastery 68%' },
+        { name: 'Mr. Kofi', class: 'SHS 1C', status: 'Fractions weak spot' },
+        { name: 'Ms. Adjei', class: 'JHS 3B', status: '3 students need help' }
+      ];
+
+      function getActiveUser() {
+        return authState.pendingUser || {
+          name: 'Your profile',
+          username: 'student',
+          email: '',
+          level: 'Level 1',
+          xp: 0
+        };
+      }
+
+      function renderUserProfile() {
+        const user = getActiveUser();
+        const initials = user.name.split(/\s+/).map(part => part[0]).join('').slice(0, 2).toUpperCase();
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileName = document.getElementById('profileName');
+        const profileMeta = document.getElementById('profileMeta');
+        const profileEmail = document.getElementById('profileEmail');
+        if (profileAvatar) profileAvatar.textContent = initials;
+        if (profileName) profileName.textContent = user.name;
+        if (profileMeta) profileMeta.textContent = `@${user.username || 'student'} • ${user.level || 'Level 1'} • ${user.xp || 0} XP`;
+        if (profileEmail) profileEmail.textContent = user.email || 'your@email.com';
+      }
+
+      function handleLearningCommand(command) {
+        const normalized = command.trim().toLowerCase();
+        if (!normalized) return;
+        if (normalized.includes('quiz') || normalized.includes('practice') || normalized.includes('question')) {
+          renderApp('practice');
+          return;
+        }
+        if (normalized.includes('explain') || normalized.includes('help') || normalized.includes('atom')) {
+          renderApp('tutor');
+          return;
+        }
+        if (normalized.includes('progress') || normalized.includes('ready') || normalized.includes('exam')) {
+          renderApp('progress');
+          return;
+        }
+        renderApp('learn');
+      }
+
+      function openDictionaryWordChallenge() {
+        window.open('dictionary_word_challenge.html', '_blank', 'noopener');
+      }
+
+      function renderDictionaryChallengeCard() {
+        const words = [
+          ['algorithm', 'A step-by-step procedure for solving a problem.'],
+          ['abstraction', 'A way to hide implementation details.'],
+          ['backtracking', 'A search method that explores alternate paths.'],
+          ['bandwidth', 'The capacity of a communication channel.'],
+          ['authentication', 'The process of confirming a user identity.']
+        ];
+        const featured = words[Math.floor(Math.random() * words.length)];
+        return `
+          <div class="challenge-panel" style="margin-top: 18px; background: linear-gradient(135deg, rgba(98,221,155,0.12), rgba(94,162,255,0.1)); border-color: rgba(98,221,155,0.3);">
+            <div class="header"><h3>🧠 Dictionary Word Challenge</h3><span class="badge">New game</span></div>
+            <div class="mission-card" style="background: rgba(7,17,31,0.42); border-color: rgba(98,221,155,0.25);">
+              <div class="meta"><span>Random word of the moment</span><span>6 modes</span></div>
+              <div class="title"><strong style="font-size: 1.4rem;">${featured[0]}</strong><span class="pill">${featured[1]}</span></div>
+              <div class="move-meta"><span>Spell</span><span>Understand</span><span>Recall</span><span>Master</span></div>
+              <button class="btn btn-primary" type="button" id="dictionaryChallengeBtn" style="padding: 0.7rem 0.9rem;">Play word challenge →</button>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderApp(view) {
+        renderUserProfile();
+        pageTitle.textContent = view === 'dashboard' ? 'Home' :
+          view === 'learn' ? 'Learn' :
+          view === 'practice' ? 'Practice' :
+          view === 'challenges' ? 'Challenges' :
+          view === 'tutor' ? 'Ask Atom' :
+          view === 'leaderboard' ? 'Leaderboard' :
+          view === 'progress' ? 'Progress' : 'Teachers';
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.toggle('active', item.dataset.view === view);
+        });
+
+        if (view === 'dashboard') {
+          const user = getActiveUser();
+          appContent.innerHTML = `
+            <div style="margin-bottom: 18px;">
+              <p style="margin: 0 0 4px; color: var(--muted);">Your learning system is ready.</p>
+              <h2 style="margin: 0;">Good morning, ${user.name.split(' ')[0]}.</h2>
+            </div>
+            <div class="command-box">
+              <h3>What are we learning?</h3>
+              <p>Atom can turn a goal, a question, or the time you have into your next action.</p>
+              <div class="command-input">
+                <input id="learningCommand" type="text" placeholder="I have 20 minutes. What should I study?" aria-label="What are we learning?" />
+                <button class="btn btn-primary" id="commandSubmit" type="button">Ask Atom</button>
+              </div>
+              <div class="quick-actions">
+                <button class="quick-action" type="button" data-command="Teach me quadratic equations">Teach me</button>
+                <button class="quick-action" type="button" data-command="Quiz me on my weak topics">Quiz me</button>
+                <button class="quick-action" type="button" data-command="Help me understand this">Help me</button>
+                <button class="quick-action" type="button" data-command="Show my exam readiness">Plan my week</button>
+              </div>
+            </div>
+            <div class="stats-row">
+              <div class="stat-card"><span class="label">Current streak</span><strong>🔥 ${user.streak || 0} days</strong></div>
+              <div class="stat-card"><span class="label">Current level</span><strong>${user.level || 'Level 1'}</strong></div>
+              <div class="stat-card"><span class="label">XP earned</span><strong>${user.xp || 0}</strong></div>
+              <div class="stat-card"><span class="label">Atoms</span><strong>${user.atoms || 0}</strong></div>
+            </div>
+            <div class="command-grid">
+              <div class="next-move">
+                <div class="overline">🧠 Your next best move</div>
+                <h3>Master Quadratic Equations</h3>
+                <p>You have mastered 4 of 5 prerequisite skills. Your recent answers show one remaining weakness, so this is the fastest way to improve today.</p>
+                <div class="move-meta"><span>Medium</span><span>8 minutes</span><span>+180 XP</span></div>
+                <button class="btn btn-primary" type="button" data-view="learn">Start learning →</button>
+              </div>
+              <div class="metric-panel health-panel">
+                <div class="health-score"><strong>82%</strong></div>
+                <div class="health-copy">
+                  <h3>Knowledge health</h3>
+                  <p>Your mastery is strong. A short Geometry review will help prevent a knowledge drop.</p>
+                  <div class="signal-list"><div class="signal"><span>Strongest</span><strong>Algebra</strong></div><div class="signal"><span>Needs review</span><strong>Geometry</strong></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="section-label">Today's mission · 2 of 3 complete</div>
+            <div class="mission-card">
+              <div class="meta"><span>24-minute adaptive plan</span><span>+100 XP</span></div>
+              <div class="title"><strong>Finish your recovery activity</strong><button class="btn btn-primary" type="button" data-view="practice" style="padding:0.6rem 0.9rem;">Continue</button></div>
+              <div class="progress-meter"><span style="width: 66%;"></span></div>
+            </div>
+            ${renderDictionaryChallengeCard()}
+            <div class="section-label">Your week</div>
+            <div class="week-strip"><div class="week-day">Mon<span></span></div><div class="week-day">Tue<span></span></div><div class="week-day">Wed<span></span></div><div class="week-day">Thu<span></span></div><div class="week-day">Fri<span></span></div><div class="week-day">Sat<span></span></div><div class="week-day">Sun<span></span></div></div>
+            <div class="section-label">Continue learning</div>
+            <div class="lesson-list">
+              ${lessonsData.slice(0, 3).map(lesson => `<div class="lesson-item"><div class="left"><div class="tiny-badge">${lesson.badge}</div><div><strong>${lesson.title}</strong><small>${lesson.level}</small></div></div><div style="text-align:right; color: var(--muted); font-size: 0.8rem;">${lesson.progress}</div></div>`).join('')}
+            </div>
+            <div class="memory-panel">
+              <div><strong>🧠 Atom remembers</strong><p>You prefer visual explanations. Watch for negative signs in algebra, a pattern that has caused mistakes before.</p></div>
+              <button class="btn btn-secondary" type="button" data-view="tutor" style="padding:0.6rem 0.8rem;">Review memory</button>
+            </div>
+          `;
+          appContent.querySelectorAll('[data-view]').forEach(button => button.addEventListener('click', () => renderApp(button.dataset.view)));
+          appContent.querySelector('#commandSubmit')?.addEventListener('click', () => handleLearningCommand(appContent.querySelector('#learningCommand')?.value || ''));
+          appContent.querySelector('#learningCommand')?.addEventListener('keydown', event => {
+            if (event.key === 'Enter') handleLearningCommand(event.target.value);
+          });
+          appContent.querySelectorAll('[data-command]').forEach(button => button.addEventListener('click', () => handleLearningCommand(button.dataset.command)));
+          appContent.querySelector('#dictionaryChallengeBtn')?.addEventListener('click', openDictionaryWordChallenge);
+        }
+
+        if (view === 'learn') {
+          appContent.innerHTML = `
+            <div class="stats-row">
+              <div class="stat-card"><span class="label">Overall mastery</span><strong>72%</strong></div>
+              <div class="stat-card"><span class="label">Subjects</span><strong>5</strong></div>
+              <div class="stat-card"><span class="label">Skills passed</span><strong>142</strong></div>
+              <div class="stat-card"><span class="label">Focus</span><strong>Algebra</strong></div>
+            </div>
+            <div class="dashboard-grid">
+              <div class="practice-panel">
+                <div class="header"><h3>Continue learning</h3><button class="link-btn">View all →</button></div>
+                <div class="lesson-list">
+                  ${lessonsData.map((lesson, index) => `
+                    <div class="lesson-item">
+                      <div class="left">
+                        <div class="tiny-badge">${index + 1}</div>
+                        <div>
+                          <strong>${lesson.title}</strong>
+                          <small>${lesson.level}</small>
+                        </div>
+                      </div>
+                      <button class="btn btn-ghost" style="padding:0.65rem 0.8rem;">Continue</button>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+              <div class="quest-panel">
+                <div class="header"><h3>Quests</h3><span class="badge">3 active</span></div>
+                <div class="quest-list">
+                  ${questData.map(q => `
+                    <div class="quest-item">
+                      <div>
+                        <strong>${q.title}</strong>
+                        <small>${q.detail}</small>
+                      </div>
+                      <span class="pill">${q.reward}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+            <div class="practice-panel" style="margin-top: 18px;">
+              <div class="header"><h3>My knowledge map</h3><span class="badge">Mathematics</span></div>
+              <div class="knowledge-map">
+                <div class="map-root">Mathematics · 82%</div>
+                <div class="map-branches">
+                  <div class="map-node"><strong>Algebra</strong><span>91% · mastered</span></div>
+                  <div class="map-node developing"><strong>Geometry</strong><span>61% · developing</span></div>
+                  <div class="map-node current"><strong>Quadratics</strong><span>73% · learning now</span></div>
+                </div>
+                <div class="map-branches">
+                  <div class="map-node"><strong>Linear equations</strong><span>94% · mastered</span></div>
+                  <div class="map-node developing"><strong>Factorisation</strong><span>61% · review soon</span></div>
+                  <div class="map-node"><strong>Functions</strong><span>78% · ready next</span></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (view === 'practice') {
+          appContent.innerHTML = `
+            <div class="practice-panel">
+              <div class="header"><h3>Quick practice</h3><span class="badge">5 questions</span></div>
+              <div class="question">
+                <p style="margin:0; color: var(--muted);">Mathematics • Algebra</p>
+                <h3 style="margin: 10px 0 8px; font-size: 1.35rem;">Solve: 3x + 6 = 18</h3>
+                <div class="answer-grid">
+                  <button class="answer-option">x = 2</button>
+                  <button class="answer-option correct">x = 4</button>
+                  <button class="answer-option">x = 5</button>
+                  <button class="answer-option">x = 6</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (view === 'challenges') {
+          appContent.innerHTML = `
+            <div class="challenge-panel">
+              <div class="header"><h3>60-second challenge</h3><span class="badge">Live</span></div>
+              <div class="mission-box">
+                <div class="mission-card">
+                  <div class="meta"><span>Round 4</span><span>00:52</span></div>
+                  <div class="title"><strong>Solve 5 questions before the timer ends</strong><button class="btn btn-primary" style="padding:0.7rem 0.9rem;">Start</button></div>
+                </div>
+              </div>
+              <div class="mini-cards">
+                <div class="mini-card"><span style="color: var(--muted);">Accuracy</span><strong>84%</strong></div>
+                <div class="mini-card"><span style="color: var(--muted);">Reward</span><strong>+80 XP</strong></div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (view === 'tutor') {
+          appContent.innerHTML = `
+            <div class="tutor-panel">
+              <div class="header"><h3>Atom AI</h3><span class="badge">Context aware</span></div>
+              <div class="ai-modes" role="group" aria-label="Atom AI teaching modes">
+                <button class="ai-mode active" type="button">💡 Explain</button>
+                <button class="ai-mode" type="button">🧩 Hint</button>
+                <button class="ai-mode" type="button">🧠 Socratic</button>
+                <button class="ai-mode" type="button">🎯 Practice</button>
+                <button class="ai-mode" type="button">📷 Vision</button>
+                <button class="ai-mode" type="button">🎙️ Voice</button>
+              </div>
+              <div class="chat-wrap">
+                <div class="chat-messages">
+                  <div class="msg bot">I can explain this concept, give you a hint, or quiz you. Which would you like?</div>
+                  <div class="msg user">Explain photosynthesis simply.</div>
+                  <div class="msg bot">Photosynthesis is how plants turn sunlight into chemical energy. They absorb water from the soil and carbon dioxide from the air, then use sunlight to make glucose and oxygen.</div>
+                </div>
+                <div class="chat-input">
+                  <input type="text" value="Ask a question..." aria-label="Ask Atom" />
+                  <button class="btn btn-primary" style="padding:0.7rem 1rem;">Send</button>
+                </div>
+              </div>
+            </div>
+          `;
+          appContent.querySelectorAll('.ai-mode').forEach(mode => mode.addEventListener('click', () => {
+            appContent.querySelectorAll('.ai-mode').forEach(item => item.classList.remove('active'));
+            mode.classList.add('active');
+          }));
+        }
+
+        if (view === 'leaderboard') {
+          appContent.innerHTML = `
+            <div class="leaderboard-panel">
+              <div class="header"><h3>Weekly leaderboard</h3><span class="badge">Gold league</span></div>
+              <div class="leader-list">
+                ${leaderboardData.map(item => `
+                  <div class="leader-item">
+                    <div class="left">
+                      <div class="rank">#${item.rank}</div>
+                      <div>
+                        <strong>${item.name}</strong>
+                        <small>${item.xp} XP earned this week</small>
+                      </div>
+                    </div>
+                    <span class="pill">${item.name === 'You' ? 'You are climbing' : 'Active'}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        if (view === 'progress') {
+          appContent.innerHTML = `
+            <div class="progress-panel">
+              <div class="header"><h3>Insights</h3><span class="badge">+14 skills this week</span></div>
+              <div class="readiness-grid">
+                <div class="readiness-score"><strong>84%</strong><span>WASSCE READY</span></div>
+                <div>
+                  <p style="margin: 0 0 14px; color: var(--muted); line-height: 1.6;"><strong style="color: var(--text);">You're improving.</strong> Mathematics accuracy increased by 11% this week. Your biggest opportunity is speed.</p>
+                  <div class="readiness-bars"><div class="readiness-bar"><span>Knowledge</span><i style="width: 91%;"></i><strong>91%</strong></div><div class="readiness-bar"><span>Accuracy</span><i style="width: 83%;"></i><strong>83%</strong></div><div class="readiness-bar"><span>Speed</span><i style="width: 76%;"></i><strong>76%</strong></div><div class="readiness-bar"><span>Consistency</span><i style="width: 87%;"></i><strong>87%</strong></div></div>
+                </div>
+              </div>
+              <div class="mini-cards">
+                <div class="mini-card"><span style="color: var(--muted);">Overall mastery</span><strong>72%</strong></div>
+                <div class="mini-card"><span style="color: var(--muted);">Skills mastered</span><strong>142</strong></div>
+                <div class="mini-card"><span style="color: var(--muted);">Study time</span><strong>3h 42m</strong></div>
+                <div class="mini-card"><span style="color: var(--muted);">Longest streak</span><strong>23 days</strong></div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (view === 'teachers') {
+          appContent.innerHTML = `
+            <div class="teacher-panel">
+              <div class="header"><h3>Teacher overview</h3><span class="badge">3 classes</span></div>
+              <div class="teacher-list">
+                ${teacherData.map(t => `
+                  <div class="teacher-item">
+                    <div class="left">
+                      <div class="tiny-badge">👩‍🏫</div>
+                      <div>
+                        <strong>${t.name}</strong>
+                        <small>${t.class}</small>
+                      </div>
+                    </div>
+                    <span class="pill">${t.status}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      authButtons.forEach(({ button, mode }) => {
+        button?.addEventListener('click', () => {
+          createAuthModal(mode);
+          document.querySelector('main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      document.getElementById('secondaryCta').addEventListener('click', () => {
+        document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => renderApp(item.dataset.view));
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+
+      renderApp('dashboard');
+      appShell.classList.remove('visible');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dictionary Word Challenge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#17231f; --muted:#65716c; --paper:#f5f1e8; --cream:#fffdf8; --line:#d8d3c8; --green:#1c6b55; --green-dark:#124c3d; --lime:#d8f276; --coral:#e87555; --gold:#e9b84d; --shadow:0 18px 50px rgba(38,51,43,.12); }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:'Space Grotesk',sans-serif; }
+    button,input { font:inherit; }
+    button { cursor:pointer; }
+    .shell { min-height:100vh; display:grid; grid-template-columns:250px minmax(0,1fr); }
+    aside { background:var(--green-dark); color:#f4f7e9; padding:28px 18px; display:flex; flex-direction:column; gap:26px; }
+    .brand { display:flex; align-items:center; gap:12px; padding:0 10px; }
+    .brand-mark { width:38px; height:38px; border-radius:12px; display:grid; place-items:center; background:var(--lime); color:var(--green-dark); font-weight:700; font-size:1.2rem; }
+    .brand strong { font-size:1.05rem; line-height:1.05; }
+    .brand small { display:block; color:#a8c7b9; margin-top:4px; font-family:'DM Mono',monospace; font-size:.62rem; }
+    .nav-label { color:#88ad9c; font:500 .65rem 'DM Mono',monospace; letter-spacing:.12em; text-transform:uppercase; padding:0 12px; }
+    nav { display:grid; gap:7px; }
+    .nav-btn { border:1px solid transparent; color:#c4d7cd; background:transparent; text-align:left; padding:12px; border-radius:10px; display:flex; align-items:center; gap:10px; font-weight:600; }
+    .nav-btn:hover,.nav-btn.active { color:var(--lime); background:rgba(216,242,118,.1); border-color:rgba(216,242,118,.25); }
+    .side-foot { margin-top:auto; border-top:1px solid rgba(255,255,255,.15); padding:16px 10px 0; color:#8eb1a3; font-size:.75rem; line-height:1.5; }
+    main { min-width:0; padding:28px clamp(18px,4vw,58px) 50px; }
+    .topline { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:30px; }
+    .kicker { color:var(--green); font:500 .68rem 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.14em; }
+    h1 { font-size:clamp(2rem,4vw,3.7rem); letter-spacing:-.07em; line-height:.95; margin:8px 0 0; max-width:700px; }
+    .top-actions { display:flex; align-items:center; gap:10px; }
+    .score-chip { padding:10px 14px; border:1px solid var(--line); background:var(--cream); border-radius:12px; white-space:nowrap; font-weight:700; }
+    .score-chip span { color:var(--coral); }
+    .btn { border:0; border-radius:10px; padding:11px 16px; font-weight:700; transition:transform .18s,background .18s; }
+    .btn:hover { transform:translateY(-2px); }
+    .btn-primary { background:var(--green); color:white; }
+    .btn-secondary { background:var(--cream); color:var(--ink); border:1px solid var(--line); }
+    .view { display:none; animation:rise .3s ease both; }
+    .view.active { display:block; }
+    @keyframes rise { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .hero-grid { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr); gap:18px; }
+    .panel { background:var(--cream); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); }
+    .challenge-card { padding:clamp(22px,4vw,42px); min-height:550px; display:flex; flex-direction:column; justify-content:space-between; }
+    .challenge-head { display:flex; justify-content:space-between; gap:14px; align-items:flex-start; }
+    .mode-tag { color:var(--green); font:500 .72rem 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.1em; }
+    .timer { font:500 1.15rem 'DM Mono',monospace; color:var(--coral); }
+    .prompt { margin:50px auto 30px; text-align:center; max-width:650px; width:100%; }
+    .prompt h2 { font-size:clamp(2.1rem,6vw,4.8rem); letter-spacing:-.08em; line-height:.95; margin:0 0 20px; }
+    .prompt p { color:var(--muted); line-height:1.6; margin:0 auto; max-width:600px; }
+    .answer-area { max-width:650px; width:100%; margin:0 auto; }
+    .answer-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .answer { border:1px solid var(--line); border-radius:11px; background:#faf8f1; color:var(--ink); padding:14px; text-align:left; font-weight:600; }
+    .answer:hover { border-color:var(--green); background:#f1f8e1; }
+    .answer.correct { background:#dbf3df; border-color:#4aab70; }
+    .answer.wrong { background:#ffe0d6; border-color:var(--coral); }
+    .word-input { width:100%; padding:16px; border:1px solid var(--line); border-radius:11px; background:#faf8f1; color:var(--ink); outline:0; text-align:center; font-size:1.2rem; }
+    .word-input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(28,107,85,.12); }
+    .tile-row { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; }
+    .tile { min-width:42px; height:45px; border:1px solid var(--line); border-radius:10px; background:#f1ede2; color:var(--ink); font-weight:700; font-size:1.1rem; }
+    .tile:hover { background:var(--lime); }
+    .status { min-height:25px; margin-top:14px; text-align:center; font-weight:600; }
+    .status.good { color:var(--green); } .status.bad { color:var(--coral); }
+    .challenge-foot { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:28px; color:var(--muted); font-size:.85rem; }
+    .help-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .help { border:1px solid var(--line); background:transparent; border-radius:8px; color:var(--muted); padding:8px 10px; font-size:.76rem; }
+    .help:hover { color:var(--green); border-color:var(--green); }
+    .side-stack { display:grid; gap:18px; }
+    .stat-panel { padding:20px; }
+    .stat-panel h3,.panel-title { margin:0 0 16px; font-size:1.05rem; }
+    .meter { height:12px; background:#e8e3d8; border-radius:99px; overflow:hidden; margin:12px 0 8px; }
+    .meter span { display:block; height:100%; width:38%; background:var(--green); border-radius:inherit; transition:width .35s; }
+    .stat-line { display:flex; justify-content:space-between; color:var(--muted); font-size:.82rem; margin-top:8px; }
+    .stat-line strong { color:var(--ink); }
+    .league { display:flex; align-items:center; gap:12px; }
+    .league-mark { width:50px; height:50px; border-radius:14px; display:grid; place-items:center; background:#fff0c5; color:#926313; font-size:1.4rem; }
+    .league strong { display:block; font-size:1.2rem; } .league small { color:var(--muted); }
+    .word-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+    .word-card { background:var(--cream); border:1px solid var(--line); border-radius:14px; padding:16px; }
+    .word-card h3 { margin:0 0 8px; font-size:1.05rem; } .word-card p { color:var(--muted); line-height:1.5; font-size:.84rem; margin:0; }
+    .word-meta { display:flex; justify-content:space-between; gap:8px; margin-top:14px; color:var(--green); font:500 .68rem 'DM Mono',monospace; text-transform:uppercase; }
+    .search { width:100%; max-width:430px; padding:13px 15px; border:1px solid var(--line); border-radius:10px; background:var(--cream); outline:0; margin-bottom:20px; }
+    .page-head { display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:22px; }
+    .page-head h2 { font-size:2rem; letter-spacing:-.06em; margin:5px 0 0; }
+    .mode-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; }
+    .mode-card { padding:22px; min-height:190px; cursor:pointer; transition:transform .2s,border-color .2s; }
+    .mode-card:hover { transform:translateY(-4px); border-color:var(--green); }
+    .mode-card b { color:var(--green); font:500 .68rem 'DM Mono',monospace; } .mode-card h3 { font-size:1.35rem; margin:18px 0 8px; } .mode-card p { color:var(--muted); line-height:1.5; margin:0; }
+    .progress-list { display:grid; gap:13px; max-width:760px; } .progress-row { padding:16px 18px; background:var(--cream); border:1px solid var(--line); border-radius:13px; }
+    .progress-row > div:first-child { display:flex; justify-content:space-between; margin-bottom:8px; font-weight:600; } .progress-row small { color:var(--muted); }
+    .empty { padding:36px; color:var(--muted); background:var(--cream); border:1px dashed var(--line); border-radius:14px; }
+    @media (max-width:900px) { .shell{grid-template-columns:1fr;} aside{padding:16px; gap:14px;} nav{display:flex; overflow:auto;} .nav-btn{white-space:nowrap;} .side-foot{display:none;} main{padding:22px 16px 40px;} .hero-grid{grid-template-columns:1fr;} .side-stack{grid-template-columns:repeat(2,minmax(0,1fr));} .word-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media (max-width:600px) { .topline,.page-head{align-items:flex-start; flex-direction:column;} .top-actions{width:100%; justify-content:space-between;} .challenge-card{min-height:600px;} .answer-grid,.mode-grid,.word-grid,.side-stack{grid-template-columns:1fr;} .challenge-foot{align-items:flex-start; flex-direction:column;} }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand"><div class="brand-mark">Aa</div><div><strong>Word<br>Challenge</strong><small>DICTIONARY EDITION</small></div></div>
+      <div class="nav-label">Playground</div>
+      <nav>
+        <button class="nav-btn active" data-view="play">&#9654; Play round</button>
+        <button class="nav-btn" data-view="modes">&#10022; Challenge modes</button>
+        <button class="nav-btn" data-view="found">&#9733; Wordlist Found</button>
+        <button class="nav-btn" data-view="progress">&#8599; Progress</button>
+      </nav>
+      <div class="side-foot">A living word bank built from the supplied Dictionary of Computer Science, Engineering, and Technology.<br><br><span id="bankCount">0</span> playable entries</div>
+    </aside>
+    <main>
+      <div class="topline"><div><div class="kicker">Discover / Spell / Understand / Master</div><h1>Make every word<br>stick.</h1></div><div class="top-actions"><div class="score-chip">XP <span id="xpValue">0</span></div><button class="btn btn-primary" id="newRoundBtn">New round</button></div></div>
+
+      <section class="view active" id="playView">
+        <div class="hero-grid">
+          <article class="panel challenge-card">
+            <div class="challenge-head"><div><div class="mode-tag" id="modeTag">What does it mean?</div><div class="kicker" id="roundLabel" style="margin-top:8px">ROUND 01 / 07</div></div><div class="timer" id="timer">00:20</div></div>
+            <div class="prompt"><h2 id="promptWord">algorithm</h2><p id="promptText">A systematic, step-by-step procedure for solving a problem or accomplishing a task.</p></div>
+            <div class="answer-area" id="answerArea"></div>
+            <div class="status" id="status"></div>
+            <div class="challenge-foot"><div class="help-row"><button class="help" data-help="first">Reveal first letter</button><button class="help" data-help="synonym">Show synonym</button><button class="help" data-help="slow">Slow timer</button></div><span id="streakLabel">Streak 0</span></div>
+          </article>
+          <div class="side-stack"><article class="panel stat-panel"><h3>Today’s route</h3><div class="stat-line"><span>Words mastered</span><strong id="masteredCount">0 / 7</strong></div><div class="meter"><span id="roundMeter"></span></div><div class="stat-line"><span>Best streak</span><strong id="bestStreak">0</strong></div></article><article class="panel stat-panel"><h3>Current league</h3><div class="league"><div class="league-mark">◆</div><div><strong id="leagueName">Bronze</strong><small id="leagueCopy">Keep building your streak</small></div></div><div class="stat-line"><span>Next league</span><strong id="nextLeague">Silver · 500 XP</strong></div></article><article class="panel stat-panel"><h3>Core game loop</h3><div class="stat-line"><span>Discover</span><strong>✓</strong></div><div class="stat-line"><span>Spell</span><strong>→</strong></div><div class="stat-line"><span>Understand</span><strong>→</strong></div><div class="stat-line"><span>Apply</span><strong>→</strong></div></article></div>
+        </div>
+      </section>
+
+      <section class="view" id="modesView"><div class="page-head"><div><div class="kicker">Six ways to learn</div><h2>Choose your pressure.</h2></div><p style="color:var(--muted);max-width:330px">Each mode uses the same dictionary entry differently, so recognition becomes recall.</p></div><div class="mode-grid" id="modeGrid"></div></section>
+      <section class="view" id="foundView"><div class="page-head"><div><div class="kicker">Your personal collection</div><h2>Wordlist Found.</h2></div><div id="foundCount" class="score-chip">0 words</div></div><input class="search" id="wordSearch" placeholder="Search your discovered words..."><div class="word-grid" id="wordGrid"></div></section>
+      <section class="view" id="progressView"><div class="page-head"><div><div class="kicker">Long-term memory</div><h2>Progress, in public.</h2></div></div><div class="progress-list" id="progressList"></div></section>
+    </main>
+  </div>
+  <script>
+    const dictionary = [
+      {word:'algorithm', definition:'A systematic, step-by-step procedure for solving a problem or accomplishing a task.', category:'Algorithms', synonym:'procedure', example:'The algorithm sorts the values from smallest to largest.', difficulty:'Core'},
+      {word:'abstraction', definition:'A technique that hides implementation details so a problem can be described at a higher level.', category:'Programming', synonym:'generalization', example:'An API is an abstraction over lower-level system services.', difficulty:'Core'},
+      {word:'abstract data type', definition:'A data type that hides its implementation and exposes behavior through defined operations.', category:'Programming', synonym:'ADT', example:'A stack is a classic abstract data type.', difficulty:'Core'},
+      {word:'absolute address', definition:'An address in an instruction that directly indicates a location in the program address space.', category:'Processors', synonym:'direct address', example:'The instruction contains an absolute address for its operand.', difficulty:'Advanced'},
+      {word:'access control', definition:'A means of allowing access to an object based on privileges and policy.', category:'Security', synonym:'permission control', example:'Access control prevents unauthorized users from reading the file.', difficulty:'Core'},
+      {word:'access time', definition:'The total time needed to retrieve data from memory or storage.', category:'Storage', synonym:'retrieval time', example:'The disk access time includes seek and rotational delay.', difficulty:'Core'},
+      {word:'accumulator', definition:'A processor register that stores an operand and often receives the result of an operation.', category:'Processors', synonym:'working register', example:'The accumulator receives the result of the addition.', difficulty:'Advanced'},
+      {word:'accuracy', definition:'The degree of precision with which a system provides the right or agreed results.', category:'Software Engineering', synonym:'correctness', example:'The sensor was tested for accuracy.', difficulty:'Core'},
+      {word:'ACID', definition:'An acronym for atomic, consistent, isolated, and durable.', category:'Database', synonym:'transaction properties', example:'The database promises ACID behavior for its transactions.', difficulty:'Core'},
+      {word:'address space', definition:'The range of addresses seen or used by a program, usually managed as a continuous memory range.', category:'Operating Systems', synonym:'memory range', example:'Each process receives its own virtual address space.', difficulty:'Advanced'},
+      {word:'admissibility condition', definition:'A requirement that a heuristic never overestimates the remaining search cost.', category:'Artificial Intelligence', synonym:'safe heuristic', example:'The admissibility condition guarantees an optimal search result.', difficulty:'Advanced'},
+      {word:'agent', definition:'A computational entity that acts on behalf of another entity autonomously.', category:'Artificial Intelligence', synonym:'autonomous actor', example:'The software agent monitors the network on behalf of the administrator.', difficulty:'Core'},
+      {word:'aggregate function', definition:'A SQL function that applies a mathematical operation to a collection of values.', category:'Database', synonym:'summary function', example:'COUNT is an aggregate function.', difficulty:'Core'},
+      {word:'aliasing', definition:'A relation or effect in which different names refer to the same location, or a sampled signal is distorted.', category:'Languages / Graphics', synonym:'name sharing', example:'Aliasing can make a diagonal line look jagged.', difficulty:'Advanced'},
+      {word:'alpha blending', definition:'A technique for computing pixel color when multiple structures contribute to the pixel.', category:'Computer Graphics', synonym:'compositing', example:'Alpha blending makes a translucent overlay look natural.', difficulty:'Advanced'},
+      {word:'ambiguous grammar', definition:'A grammar that can generate or parse the same sentence in more than one way.', category:'Languages', synonym:'non-unique grammar', example:'An ambiguous grammar can produce multiple parse trees.', difficulty:'Advanced'},
+      {word:'Amdahl’s law', definition:'A law showing that the serial fraction of a computation limits maximum parallel speedup.', category:'Performance', synonym:'speedup limit', example:'Amdahl’s law explains why adding processors eventually stops helping.', difficulty:'Advanced'},
+      {word:'analog-to-digital conversion', definition:'Sampling a continuous signal and quantizing each sample into a digital value.', category:'Communications', synonym:'A/D conversion', example:'An A/D converter turns microphone voltage into samples.', difficulty:'Core'},
+      {word:'API', definition:'An interface presented to application writers by an operating system or software component.', category:'Software Engineering', synonym:'programming interface', example:'The graphics API exposes drawing functions to the application.', difficulty:'Core'},
+      {word:'application-specific integrated circuit', definition:'An integrated circuit designed for a particular application.', category:'Computer Engineering', synonym:'ASIC', example:'The device uses an application-specific integrated circuit.', difficulty:'Advanced'},
+      {word:'approximation algorithm', definition:'A polynomial-time algorithm that returns a feasible solution guaranteed to be nearly optimal.', category:'Algorithms', synonym:'near-optimal algorithm', example:'The approximation algorithm trades exactness for speed.', difficulty:'Advanced'},
+      {word:'array', definition:'An ordered data structure whose values are accessed by one or more subscripts.', category:'Data Structures', synonym:'indexed collection', example:'The array stores one score for each player.', difficulty:'Core'},
+      {word:'artificial intelligence', definition:'The study of computer techniques that emulate aspects of human intelligence.', category:'Artificial Intelligence', synonym:'AI', example:'Artificial intelligence can infer patterns from partial information.', difficulty:'Core'},
+      {word:'assertion', definition:'A logical expression stating a condition that must hold at a point in program execution.', category:'Software Engineering', synonym:'invariant statement', example:'The assertion checks that the queue is not empty.', difficulty:'Advanced'},
+      {word:'associative array', definition:'A data structure in which values are retrieved by specifying a key rather than a numeric position.', category:'Data Structures', synonym:'map', example:'The associative array maps usernames to scores.', difficulty:'Core'},
+      {word:'asynchronous', definition:'Describing processes whose interaction does not depend on a specific global event.', category:'Operating Systems', synonym:'non-synchronous', example:'The client sends an asynchronous message and continues working.', difficulty:'Core'},
+      {word:'atomicity', definition:'The transaction property that all operations execute or none execute.', category:'Database', synonym:'all-or-nothing', example:'Atomicity prevents a half-completed transfer.', difficulty:'Core'},
+      {word:'authentication', definition:'The process of confirming a user’s identity.', category:'Security', synonym:'identity verification', example:'Authentication happens before authorization.', difficulty:'Core'},
+      {word:'automation', definition:'Machines operating without human input except for reprogramming or maintenance.', category:'Robotics', synonym:'mechanization', example:'Automation keeps the production line consistent.', difficulty:'Core'},
+      {word:'autonomous robot', definition:'A computer-controlled system programmed to carry out a task without human intervention.', category:'Robotics', synonym:'self-directed robot', example:'An autonomous robot navigates the warehouse.', difficulty:'Core'},
+      {word:'availability', definition:'The probability that a system is operative at a given instant during a specified period.', category:'Performance', synonym:'uptime', example:'Automatic recovery improved system availability.', difficulty:'Advanced'},
+      {word:'backtracking', definition:'A search process that backs up from an unfruitful path to explore another path.', category:'Algorithms', synonym:'rollback search', example:'The puzzle solver uses backtracking when a branch fails.', difficulty:'Core'},
+      {word:'backpropagation algorithm', definition:'A supervised learning algorithm that adjusts feedforward network weights to reduce error.', category:'Artificial Intelligence', synonym:'error propagation', example:'Backpropagation trains the network layer by layer.', difficulty:'Advanced'},
+      {word:'bandwidth', definition:'The range of frequencies in a signal or the maximum rate at which a system performs work.', category:'Communications', synonym:'capacity', example:'The channel has enough bandwidth for the video stream.', difficulty:'Core'},
+      {word:'barrier', definition:'A synchronization structure that requires all processes to reach it before continuing.', category:'Operating Systems', synonym:'rendezvous', example:'Every thread waits at the barrier before the next phase.', difficulty:'Advanced'},
+      {word:'benchmark', definition:'A controlled experiment measuring execution time, utilization, or throughput using a representative workload.', category:'Performance', synonym:'performance test', example:'The benchmark compares two database engines.', difficulty:'Core'},
+      {word:'binary search tree', definition:'A tree structure in which left descendants are smaller and right descendants are larger than a node.', category:'Data Structures', synonym:'BST', example:'The binary search tree finds the key quickly.', difficulty:'Core'},
+      {word:'Bayes’ rule', definition:'A rule relating the conditional probability of an event to the reverse conditional probability.', category:'Numerical Computing', synonym:'Bayes theorem', example:'Bayes’ rule updates a belief after observing evidence.', difficulty:'Advanced'}
+    ];
+
+    const modes = [
+      {id:'meaning',name:'What does it mean?',label:'UNDERSTAND',description:'Choose the definition that matches the word.'},
+      {id:'spell',name:'Spell it',label:'SPELL',description:'Read the definition and type the term.'},
+      {id:'drag',name:'Drag the word',label:'ASSEMBLE',description:'Arrange scrambled letters into the answer.'},
+      {id:'search',name:'Word search',label:'DISCOVER',description:'Find a hidden word in a letter field.'},
+      {id:'flash',name:'Flash recall',label:'REMEMBER',description:'Study a word briefly, then reproduce it.'},
+      {id:'detective',name:'Dictionary detective',label:'APPLY',description:'Use category, synonym, and context clues.'}
+    ];
+    const dictionarySearch = new URLSearchParams(window.location.search).get('search') || '';
+    const state = { view:'play', mode:'meaning', current:0, round:[], xp:Number(localStorage.getItem('dwc-xp')||0), streak:0, best:Number(localStorage.getItem('dwc-best')||0), found:JSON.parse(localStorage.getItem('dwc-found')||'[]'), timer:null, seconds:20, answered:false, helpUsed:false, dictionarySearch };
+    const $ = id => document.getElementById(id);
+    const shuffle = array => [...array].sort(() => Math.random() - .5);
+    const currentWord = () => state.round[state.current];
+    function save() { localStorage.setItem('dwc-xp',state.xp); localStorage.setItem('dwc-best',state.best); localStorage.setItem('dwc-found',JSON.stringify(state.found)); }
+    function startRound() { state.round=shuffle(dictionary).slice(0,7); state.current=0; state.streak=0; nextQuestion(); }
+    function nextQuestion() { clearInterval(state.timer); state.answered=false; state.helpUsed=false; state.seconds=20; renderQuestion(); updateStats(); state.timer=setInterval(() => { state.seconds--; $('timer').textContent=`00:${String(Math.max(0,state.seconds)).padStart(2,'0')}`; if(state.seconds<=0) { clearInterval(state.timer); answer(false,'Time ran out. Try the next one.'); } },1000); }
+    function renderQuestion() {
+      const item=currentWord(); const mode=modes.find(entry=>entry.id===state.mode); $('modeTag').textContent=mode.name; $('roundLabel').textContent=`ROUND ${String(state.current+1).padStart(2,'0')} / 07`; $('timer').textContent='00:20'; $('status').textContent=''; $('status').className='status'; $('promptWord').textContent=state.mode==='spell'||state.mode==='detective'?mode.name:item.word; $('promptText').textContent=state.mode==='meaning'?item.definition:state.mode==='spell'?item.definition:state.mode==='drag'?'Build the word from its letters.':state.mode==='flash'?'Memorize this word, then type it below.':state.mode==='search'?'Find this word hidden in the grid.':`Category: ${item.category} · Synonym: ${item.synonym}`;
+      const area=$('answerArea');
+      if(state.mode==='meaning') { const choices=shuffle([item,...shuffle(dictionary.filter(entry=>entry.word!==item.word)).slice(0,3)]); area.innerHTML=`<div class="answer-grid">${choices.map(choice=>`<button class="answer" data-answer="${choice.word}">${choice.definition}</button>`).join('')}</div>`; area.querySelectorAll('[data-answer]').forEach(button=>button.addEventListener('click',()=>answer(button.dataset.answer===item.word,button.dataset.answer===item.word?'Correct definition.':'That clue belongs to another word.'))); }
+      if(state.mode==='spell'||state.mode==='detective'||state.mode==='flash') area.innerHTML=`<input class="word-input" id="wordAnswer" autocomplete="off" placeholder="Type the word..."><div style="text-align:center;margin-top:12px"><button class="btn btn-primary" id="submitWord">Check answer</button></div>`;
+      if(state.mode==='drag') { const letters=shuffle(item.word.replaceAll(' ','').split('')); area.innerHTML=`<div class="tile-row" id="tileRow">${letters.map((letter,index)=>`<button class="tile" data-letter="${letter}" data-index="${index}">${letter}</button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:14px"><input class="word-input" id="assembledWord" readonly placeholder="Tap letters..."><button class="btn btn-primary" id="submitDrag">Check</button></div>`; let built=''; area.querySelectorAll('.tile').forEach(tile=>tile.addEventListener('click',()=>{ if(tile.disabled)return; built+=tile.dataset.letter; tile.disabled=true; $('assembledWord').value=built; })); $('submitDrag').addEventListener('click',()=>answer(built.toLowerCase()===item.word.replaceAll(' ','').toLowerCase(),built||'No answer')); }
+      if(state.mode==='search') { const target=item.word.replaceAll(' ','').toUpperCase(); const chars=shuffle((target+shuffle('COMPUTERSCIENCEENGINEERINGTECHNOLOGY'.split('')).slice(0,Math.max(12,24-target.length))).split('')); area.innerHTML=`<p style="text-align:center;color:var(--muted)">Tap letters in order: <strong>${target}</strong></p><div class="tile-row" id="searchTiles">${chars.map((letter,index)=>`<button class="tile" data-letter="${letter}" data-index="${index}">${letter}</button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:14px"><input class="word-input" id="searchWord" readonly placeholder="Selected letters..."><button class="btn btn-primary" id="submitSearch">Check</button></div>`; let built=''; area.querySelectorAll('.tile').forEach(tile=>tile.addEventListener('click',()=>{if(tile.disabled)return; built+=tile.dataset.letter;tile.disabled=true;$('searchWord').value=built;})); $('submitSearch').addEventListener('click',()=>answer(built===target,built||'No answer')); }
+      if(state.mode==='flash') setTimeout(()=>{$('promptWord').textContent='••••••';},1100);
+      $('submitWord')?.addEventListener('click',()=>answer($('wordAnswer').value.trim().toLowerCase()===item.word.toLowerCase(),$('wordAnswer').value.trim()||'No answer')); $('wordAnswer')?.addEventListener('keydown',event=>{if(event.key==='Enter')$('submitWord').click();});
+    }
+    function answer(correct,message) { if(state.answered)return; state.answered=true; clearInterval(state.timer); const status=$('status'); status.textContent=correct?`${message} +${state.helpUsed?10:25} XP`:`${message} The answer was “${currentWord().word}”.`; status.className=`status ${correct?'good':'bad'}`; if(correct){state.streak++; state.best=Math.max(state.best,state.streak); state.xp+=state.helpUsed?10:25; if(!state.found.includes(currentWord().word))state.found.push(currentWord().word); save();}else state.streak=0; updateStats(); setTimeout(()=>{if(state.current<6){state.current++;nextQuestion();}else{status.textContent+=' Round complete!';}},1250); }
+    function updateStats(){ $('xpValue').textContent=state.xp; $('streakLabel').textContent=`Streak ${state.streak}`; $('bestStreak').textContent=state.best; $('masteredCount').textContent=`${Math.min(state.found.length,7)} / 7`; $('roundMeter').style.width=`${Math.min(100,(state.found.length/7)*100)}%`; const leagues=[['Bronze',0,'Silver'],['Silver',500,'Gold'],['Gold',1200,'Platinum'],['Platinum',2500,'Diamond'],['Diamond',5000,'Master'],['Master',9000,'Master']]; const league=leagues.reduce((selected,current)=>state.xp>=current[1]?current:selected,leagues[0]); $('leagueName').textContent=league[0]; $('nextLeague').textContent=league[2]===league[0]?'Top league':`${league[2]} · ${leagues[leagues.findIndex(item=>item[0]===league[2])]?.[1]||9000} XP`; }
+    function showView(view){ state.view=view; document.querySelectorAll('.view').forEach(element=>element.classList.remove('active')); $(`${view}View`).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(button=>button.classList.toggle('active',button.dataset.view===view)); if(view==='found')renderFound(); if(view==='progress')renderProgress(); if(view==='modes')renderModes(); }
+    function renderFound(filter=''){ const query=filter.toLowerCase(); const source=state.dictionarySearch ? dictionary : dictionary.filter(item=>state.found.includes(item.word)); const list=source.filter(item=>item.word.includes(query)||item.definition.toLowerCase().includes(query)||item.category.toLowerCase().includes(query)); $('foundCount').textContent=state.dictionarySearch?`${list.length} matches`:`${state.found.length} words`; $('wordSearch').placeholder=state.dictionarySearch?'Search the full dictionary...':'Search your discovered words...'; if(document.activeElement!==$('wordSearch'))$('wordSearch').value=state.dictionarySearch; $('wordGrid').innerHTML=list.length?list.map(item=>`<article class="word-card"><h3>${item.word}</h3><p>${item.definition}</p><div class="word-meta"><span>${item.category}</span><span>${item.difficulty}</span></div></article>`).join(''):`<div class="empty">No dictionary entries matched “${query}”. Try a shorter term or a category.</div>`; }
+    function renderModes(){ $('modeGrid').innerHTML=modes.map(mode=>`<article class="panel mode-card" data-mode="${mode.id}"><b>${mode.label}</b><h3>${mode.name}</h3><p>${mode.description}</p></article>`).join(''); document.querySelectorAll('[data-mode]').forEach(card=>card.addEventListener('click',()=>{state.mode=card.dataset.mode;showView('play');nextQuestion();})); }
+    function renderProgress(){ $('progressList').innerHTML=[['Discovery',state.found.length,dictionary.length],['Accuracy',Math.round((state.xp/Math.max(1,state.found.length*25))*100),100],['Best streak',state.best,10],['XP to next league',state.xp%500,500]].map(row=>`<div class="progress-row"><div><span>${row[0]}</span><strong>${row[1]}${row[0]==='Accuracy'?'%':` / ${row[2]}`}</strong></div><div class="meter"><span style="width:${Math.min(100,(row[1]/row[2])*100)}%"></span></div><small>${row[0]==='Discovery'?'Every word you answer correctly is saved to your personal word bank.':'Keep playing across modes to strengthen this signal.'}</small></div>`).join(''); }
+    document.querySelectorAll('.nav-btn').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.view))); $('newRoundBtn').addEventListener('click',()=>{state.mode=modes[Math.floor(Math.random()*modes.length)].id;startRound();showView('play');}); $('wordSearch').addEventListener('input',event=>renderFound(event.target.value)); document.querySelectorAll('.help').forEach(button=>button.addEventListener('click',()=>{if(state.answered)return; state.helpUsed=true; const item=currentWord(); if(button.dataset.help==='first')$('promptText').textContent=`Starts with “${item.word[0].toUpperCase()}”. ${item.definition}`; if(button.dataset.help==='synonym')$('promptText').textContent=`Synonym: ${item.synonym}. ${item.definition}`; if(button.dataset.help==='slow'){state.seconds=Math.min(40,state.seconds+10);$('timer').textContent=`00:${String(state.seconds).padStart(2,'0')}`;} }));
+    $('bankCount').textContent=dictionary.length; renderModes(); renderProgress(); updateStats(); if(state.dictionarySearch){ showView('found'); renderFound(state.dictionarySearch); } else { renderFound(); startRound(); }
+  </script>
+</body>
+</html>
